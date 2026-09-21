@@ -113,6 +113,7 @@
             <properties name="tooltip" value=""/>
             <properties name="cls" value=""/>
             <properties name="xcpId" value="columnvbox1"/>
+            <properties name="items"/>
             <children componentDefinitionId="xcp_dropdown_list">
               <properties name="fieldLabel" value="Attribute"/>
               <properties name="ariaLabel" value="Label"/>
