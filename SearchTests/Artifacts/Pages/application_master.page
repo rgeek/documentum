@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/application_master.page" categoryId="com.emc.xcp.artifact.page" name="application_master" label="Master" templateType="application_master" isViewPage="false" isIconButton="false">
+  <title exprStr="appmaster_defpage"/>
+  <rootContainer>
+    <properties name="xcpId" value="root"/>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title" value=""/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
+      <properties name="hidden" value=""/>
+      <properties name="cls" value="xcp-master-branding-header"/>
+      <properties name="ariaRole" value="region"/>
+      <properties name="xcpId" value="column_box"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
+        <properties name="orientation" value="Horizontal"/>
+        <properties name="width" value="100%"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="labelWidth" value="50" type="INTEGER"/>
+        <properties name="defaultMargins" value="0"/>
+        <properties name="margins" value="0"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="right"/>
+        <properties name="valign" value="bottom"/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnhbox"/>
+        <children componentDefinitionId="xcp_user_button">
+          <properties name="ariaLabel" value="user_button"/>
+          <properties name="cls" value="xcp-default-header-userButton"/>
+          <properties name="xcpId" value="user_button"/>
+        </children>
+      </children>
+    </children>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title" value=""/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
+      <properties name="hidden" value=""/>
+      <properties name="cls" value="xcp-master-header"/>
+      <properties name="ariaRole" value="region"/>
+      <properties name="xcpId" value="column_box1"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
+        <properties name="orientation" value="Horizontal"/>
+        <properties name="width" value="100%"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="labelWidth" value="50" type="INTEGER"/>
+        <properties name="defaultMargins" value="0"/>
+        <properties name="margins" value="0"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="bottom"/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnhbox1"/>
+        <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_navigation_menu">
+          <properties name="orientation" value="horizontal"/>
+          <properties name="ariaLabel" value="navigation_menu"/>
+          <properties name="xcp_menu_onhover" value="true" type="BOOLEAN"/>
+          <properties name="autoHeight" value="" type="BOOLEAN"/>
+          <properties name="autoScroll" value="" type="BOOLEAN"/>
+          <properties name="autoWidth" value="" type="BOOLEAN"/>
+          <properties name="enableOverflow" value="true" type="BOOLEAN"/>
+          <properties name="width" value="" type="INTEGER"/>
+          <properties name="height" value="" type="INTEGER"/>
+          <properties name="buttonAlign" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="cls" value=""/>
+          <properties name="xcpId" value="navigation_menu"/>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
+            <properties name="text" value="Menu Item 1"/>
+            <properties name="iconCls" value=""/>
+            <properties name="hidden" value=""/>
+            <properties name="disabled" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="tooltip" value=""/>
+            <properties name="ariaLabel" value="Menu Item 1"/>
+            <properties name="navType" value="none"/>
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+            <properties name="navPageIdExpr" value=""/>
+            <properties name="navUrlExpr" value=""/>
+            <properties name="navObjectId" value=""/>
+            <properties name="navToNewTab" value="" type="BOOLEAN"/>
+            <properties name="navNewTabTarget" value=""/>
+            <properties name="navUrlParams" value=""/>
+            <properties name="xcpId" value="nav_button"/>
+          </children>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
+            <properties name="text" value="Menu Item 2"/>
+            <properties name="iconCls" value=""/>
+            <properties name="hidden" value=""/>
+            <properties name="disabled" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="tooltip" value=""/>
+            <properties name="ariaLabel" value="Menu Item 2"/>
+            <properties name="navType" value="none"/>
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+            <properties name="navPageIdExpr" value=""/>
+            <properties name="navUrlExpr" value=""/>
+            <properties name="navObjectId" value=""/>
+            <properties name="navToNewTab" value="" type="BOOLEAN"/>
+            <properties name="navNewTabTarget" value=""/>
+            <properties name="navUrlParams" value=""/>
+            <properties name="xcpId" value="nav_button1"/>
+          </children>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
+            <properties name="text" value="Menu Item 3"/>
+            <properties name="iconCls" value=""/>
+            <properties name="hidden" value=""/>
+            <properties name="disabled" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="tooltip" value=""/>
+            <properties name="ariaLabel" value="Menu Item 3"/>
+            <properties name="navType" value="none"/>
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+            <properties name="navPageIdExpr" value=""/>
+            <properties name="navUrlExpr" value=""/>
+            <properties name="navObjectId" value=""/>
+            <properties name="navToNewTab" value="" type="BOOLEAN"/>
+            <properties name="navNewTabTarget" value=""/>
+            <properties name="navUrlParams" value=""/>
+            <properties name="xcpId" value="nav_button2"/>
+          </children>
+          <children componentDefinitionId="xcp_user_button">
+            <properties name="ariaLabel" value="user_button1"/>
+            <properties name="cls" value="xcp-default-userButton"/>
+            <properties name="xcpId" value="user_button1"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <children componentDefinitionId="xcp_page">
+      <properties name="cls" value="xcp-content-area"/>
+      <properties name="margin" value=""/>
+      <properties name="width" value="" type="INTEGER"/>
+      <properties name="height" value="" type="INTEGER"/>
+      <properties name="xcpId" value="page"/>
+    </children>
+  </rootContainer>
+</uitemplate:Page>

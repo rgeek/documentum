@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright (c) 2010-2011. EMC Corporation.  All Rights Reserved.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:lang="http://www.springframework.org/schema/lang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd">
+
+    <context:property-placeholder location="classpath*:com/emc/xcp/config/web/deployment-ui.properties" ignore-unresolvable="true"/>
+
+    <context:spring-configured/>
+
+    <!-- The controllers are autodetected POJOs labeled with the @Controller annotation. -->
+    <context:component-scan base-package="com.emc.xcp.ui.services" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+
+    <!-- Allows for mapping the DispatcherServlet to "/" by forwarding static resource requests to the container's default Servlet -->
+    <mvc:default-servlet-handler/>
+
+    <bean id="pageIdentityAttribute" class="java.lang.String">
+        <constructor-arg>
+            <value>pageIdentity</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="modelManager" class="com.emc.xcp.ui.services.config.ModelManager"/>
+
+    <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManager"/>
+    </bean>
+
+    <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation">
+            <value>classpath:/com/emc/xcp/config/web/resourceCache.xml</value>
+        </property>
+    </bean>-->
+
+    <bean id="cacheManager" class="org.springframework.cache.jcache.JCacheCacheManager">
+        <property name="cacheManager" ref="jCacheManager" />
+    </bean>
+    <bean id="jCacheManager" class="org.springframework.cache.jcache.JCacheManagerFactoryBean">
+        <property name="cacheManagerUri" value="classpath:/com/emc/xcp/config/web/resourceCache.xml"/>
+    </bean>
+
+    <bean id="resourceBundleCache" class="com.emc.xcp.ui.services.support.ResourceBundleCache">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+        <property name="resourceBundlePathBuilder" ref="resourceBundlePathBuilder"/>
+        <property name="addPrefixToMissingStrings" value="#{runtimeConfig['com.emc.xcp.ui.services.support.ResourceBundleCache.addPrefixToMissingStrings']}" />
+        <property name="stringsPrefix" value="#{runtimeConfig['com.emc.xcp.ui.services.support.ResourceBundleCache.stringsPrefix']}" />
+    </bean>
+
+    <bean id="pageFilePathBuilder" class="com.emc.xcp.ui.services.support.PageFilePathBuilder">
+        <property name="basePath" value="/pages"/>
+        <property name="fileExt" value=".json"/>
+    </bean>
+
+    <bean id="stepFilePathBuilder" class="com.emc.xcp.ui.services.support.PageFilePathBuilder">
+        <property name="basePath" value="/steps"/>
+        <property name="fileExt" value=".json"/>
+    </bean>
+    <bean id="fragmentFilePathBuilder" class="com.emc.xcp.ui.services.support.PageFilePathBuilder">
+        <property name="basePath" value="/fragments"/>
+        <property name="fileExt" value=".json"/>
+    </bean>
+    <bean id="contextMenuFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/actions"/>
+        <property name="fileExt" value=".json"/>
+    </bean>
+    <bean id="pickListFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/picklist" />
+        <property name="fileExt" value=".json" />
+    </bean>
+    <bean id="userDefinedActionFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/actions" />
+        <property name="fileExt" value=".json" />
+    </bean>
+
+    <bean id="typesFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/types" />
+        <property name="fileExt" value=".json" />
+    </bean>
+    <bean id="facetsFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/facets" />
+        <property name="fileExt" value=".json" />
+    </bean>
+    <bean id="appParamFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/appparam" />
+        <property name="fileExt" value=".json" />
+    </bean>
+	<bean id="sessionVarFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/sessionvariable" />
+        <property name="fileExt" value=".json" />
+    </bean>
+    <bean id="jsFilePathBuilder" class="com.emc.xcp.ui.services.support.FilePathBuilder">
+        <property name="basePath" value="/js" />
+        <property name="fileExt" value=".js" />
+    </bean>
+
+    <bean id="resourceBundlePathBuilder" class="com.emc.xcp.ui.services.support.ResourceBundlePathBuilder">
+        <property name="basePath" value="/locales"/>
+        <property name="resourceBundleName" value="application"/>
+        <property name="fileExt" value=".properties"/>
+    </bean>
+
+    <bean id="resourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="pageFilePathBuilder"/>
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="stepResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="stepFilePathBuilder"/>
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="fragmentResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="fragmentFilePathBuilder"/>
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contextMenuResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="contextMenuFilePathBuilder"/>
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="picklistResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="pickListFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="userDefinedActionResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="userDefinedActionFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="typesResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="typesFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="facetsResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="facetsFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="appParamResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="appParamFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+	
+	<bean id="sessionVarResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="sessionVarFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jsResourceManager" class="com.emc.xcp.ui.services.support.ResourceManager" scope="singleton">
+        <property name="filePathBuilder" ref="jsFilePathBuilder" />
+        <property name="resourceBundleCache" ref="resourceBundleCache"/>
+        <property name="loaders">
+            <list>
+                <bean class="com.emc.xcp.ui.services.support.ServletFileLoader"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--To resolve the pageView-->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+
+    <bean id="pageView" class="com.emc.xcp.ui.services.PageView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="pageIdentityAttribute" ref="pageIdentityAttribute"/>
+        <property name="resourceManager" ref="resourceManager"/>
+    </bean>
+    <bean id="stepView" class="com.emc.xcp.ui.services.PageView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="pageIdentityAttribute" ref="pageIdentityAttribute"/>
+        <property name="resourceManager" ref="stepResourceManager"/>
+    </bean>
+    <bean id="fragmentView" class="com.emc.xcp.ui.services.PageView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="pageIdentityAttribute" ref="pageIdentityAttribute"/>
+        <property name="resourceManager" ref="fragmentResourceManager"/>
+    </bean>
+    <bean id="contextMenuView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="contextMenuResourceManager"/>
+        <property name="fileName" value="context_menu_config"/>
+    </bean>
+    <bean id="picklistView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="picklistResourceManager"/>
+        <property name="fileName" value="picklist_data"/>
+    </bean>
+    <bean id="userDefinedActionView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="userDefinedActionResourceManager"/>
+        <property name="fileName" value="user_defined_actions"/>
+    </bean>
+
+    <bean id="typesView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="typesResourceManager"/>
+        <property name="fileName" value="types_data"/>
+    </bean>
+    <bean id="facetsView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="facetsResourceManager"/>
+        <property name="fileName" value="facet_data"/>
+    </bean>
+    <bean id="appParamView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="appParamResourceManager"/>
+        <property name="fileName" value="application_parameter_data"/>
+    </bean>
+	<bean id="sessionVarView" class="com.emc.xcp.ui.services.JsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="sessionVarResourceManager"/>
+        <property name="fileName" value="session_variable_data"/>
+    </bean>
+    <bean id ="allJSONView" class="com.emc.xcp.ui.services.MultiJsonFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="fileIdentites">
+            <list>
+                 <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                     <property name="fileName" value="application_parameter_data"/>
+                     <property name="id" value="application_parameter_data"/>
+                     <property name="resourceManager" ref="appParamResourceManager"/>
+                 </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="session_variable_data"/>
+                    <property name="id" value="session_variable_data"/>
+                    <property name="resourceManager" ref="sessionVarResourceManager"/>
+                </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="facet_data"/>
+                    <property name="id" value="facet_data"/>
+                    <property name="resourceManager" ref="facetsResourceManager"/>
+                </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="types_data"/>
+                    <property name="id" value="types_data"/>
+                    <property name="resourceManager" ref="typesResourceManager"/>
+                </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="user_defined_actions"/>
+                    <property name="id" value="user_defined_actions"/>
+                    <property name="resourceManager" ref="userDefinedActionResourceManager"/>
+                </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="picklist_data"/>
+                    <property name="id" value="picklist_data"/>
+                    <property name="resourceManager" ref="picklistResourceManager"/>
+                </bean>
+                <bean class="com.emc.xcp.ui.services.support.ResourceIdentity">
+                    <property name="fileName" value="context_menu_config"/>
+                    <property name="id" value="context_menu_config"/>
+                    <property name="resourceManager" ref="contextMenuResourceManager"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="jsView" class="com.emc.xcp.ui.services.JavaScriptFileView">
+        <property name="requestContextAttribute" value="requestContext"/>
+        <property name="resourceManager" ref="jsResourceManager"/>
+        <property name="fileName" value="AppConfiguration"/>
+        <property name="cacheSeconds" value="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    </bean>
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations" value="classpath:BravaParameters.properties" />
+        <property name="ignoreUnresolvablePlaceholders" value="true"></property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="order" value="2"></property>
+    </bean>
+
+    <bean id="vaultPropertyPlaceholderConfigurer" class="com.opentext.dctm.vault.config.VaultPropertyPlaceholderConfigurer" >
+        <property name="ignoreUnresolvablePlaceholders" value="true"></property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:BravaParameters.properties</value>
+            </list>
+        </property>
+        <property name="order" value="1"></property>
+    </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/resources/#{application['version']}/ui/**"/>
+            <bean class="com.emc.xcp.ui.services.CachingHeaderInterceptor">
+                <property name="cacheSeconds" value="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:resources mapping="/icons/**" location="/icons/, classpath:/icons/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:resources mapping="/resources/#{application['version']}/js/**" location="/js/, classpath:/js/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:resources mapping="/js/resources/**" location="/js/resources/, classpath:/js/resources/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:resources mapping="/js/ext/**" location="/js/ext/, classpath:/js/ext/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:resources mapping="/images/#{application['version']}/**" location="/images/, classpath:/images/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:resources mapping="/crystalreportviewers/**" location="/crystalreportviewers/, classpath:/crystalreportviewers/" cache-period="#{runtimeConfig.StaticApplicationResourceCacheSeconds}"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/contextMenu" view-name="contextMenuView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/picklist" view-name="picklistView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/types" view-name="typesView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/facets" view-name="facetsView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/appParam" view-name="appParamView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/sessionVar" view-name="sessionVarView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/user_defined_actions" view-name="userDefinedActionView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/ui/allJSONs" view-name="allJSONView"/>
+    <mvc:view-controller path="/resources/#{application['version']}/js/AppConfiguration.js" view-name="jsView"/>
+
+</beans>

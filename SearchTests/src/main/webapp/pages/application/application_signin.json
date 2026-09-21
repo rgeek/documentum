@@ -1,0 +1,87 @@
+{
+    "xtype": "container",
+    "border": true,
+    "cls": "signin-panel",
+    "width": 460,
+    "height": 325,
+    "padding": "0px 5px",
+    "ariaRole": "main",
+    "items": [ {
+        "xtype": "component",
+        "html": xcp.appContext.name,
+        "cls": "signin-title",
+        "padding": "5px 0"
+    }, {
+        "xtype": "panel",
+        "border": false,
+        "cls": "signin-logo-panel",
+        "width": "100%",
+        "height": 50
+    }, {
+        "xtype": "container",
+        "border": false,
+        "cls": "signin-form-panel",
+        "width": "100%",
+        "items": [ {
+            "xtype": "form",
+            "cls": "signin-form",
+            "width": "100%",
+            "height": 248,
+			"buttonAlign": "center",
+            "defaults": {
+                "width": "100%"
+            },
+            "defaultType": "textfield",
+            "monitorValid": true,
+            "border": false,
+            "bodyBorder": true,
+            "items": [ {
+                "fieldLabel": xcp.Strings.util.SignInUtil.userName,
+                "labelWidth": 120,
+                "name": "j_username",
+                "id": "j_username",
+                "allowBlank": false,
+                "emptyText": xcp.Strings.util.SignInUtil.userName,
+                "ariaLabel": xcp.Strings.util.SignInUtil.userName
+            }, {
+                "fieldLabel": xcp.Strings.util.SignInUtil.password,
+                "labelWidth": 120,
+                "name": "j_password",
+                "id": "j_password",
+                "inputType": "password",
+                "allowBlank": false,
+                "emptyText": xcp.Strings.util.SignInUtil.password,
+                "ariaLabel": xcp.Strings.util.SignInUtil.password
+            }, {
+                "xtype": "combo",
+                "labelWidth": 120,
+                "name": "j_locale",
+                "id": "j_locale",
+                "fieldLabel": xcp.Strings.util.SignInUtil.language,
+                "displayField": "language",
+                "valueField": "code",
+                "emptyText": xcp.Strings.util.SignInUtil.emptyLanguageTxt,
+                "queryMode": "local",
+                "typeAhead": true,
+                "autoSelect": true,
+                "allowBlank": false,
+                "triggerAction": "all",
+                "forceSelection": true,
+                "minChars": 1,
+                "ariaLabel": xcp.Strings.util.SignInUtil.language
+            } ],
+            "buttons": [ {
+                "id": "signin-btn",
+                "cls": "xcp_button-cls",
+                "text": xcp.Strings.util.SignInUtil.submitButton,
+                "formBind": true,
+                "dock": "bottom",
+                "handler": xcp.util.SignInUtil.signIn
+            } ]
+        } ]
+    },{
+        "xtype": "component",
+        "html": xcp.Strings.util.SignInUtil.copyright,
+        "cls": "copyright-div"
+    } ]
+}

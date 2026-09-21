@@ -1,0 +1,51 @@
+<!--
+  ~ Copyright (c) 2010-2011. EMC Corporation.  All Rights Reserved.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:lang="http://www.springframework.org/schema/lang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+<util:properties id="runtimeConfig" location="classpath:com/emc/xcp/config/web/deployment-ui.properties"/>
+    <context:spring-configured/>
+
+    <!-- Add fallback locales for new languages here -->
+    <bean id="localeFilter" class="com.emc.xcp.ui.LocaleFilter">
+         <!-- Add fallback locales for new languages in applicationContext-ui-app.xml -->
+        <property name="supportedLocales">
+            <set>
+                <value>en</value>
+                <value>fr</value>
+                <value>es</value>
+                <value>de</value>
+                <value>it</value>
+                <value>ja</value>
+                <value>zh</value>
+                <value>ko</value>
+                <value>nl</value>
+                <value>ru</value>
+                <value>ar</value>
+                <value>pt</value>
+                <value>sv</value>
+            </set>
+        </property>
+
+        <property name="defaultLocale" value="en"/>
+
+        <!-- Locales zh_HK, zh_MO, zh_TW,zh_HANT will fallback to 'en' forcefully-->
+        <property name="fallbackLocale">
+            <map>
+                <entry key="zh_HK" value="en"/>
+                <entry key="zh_MO" value="en"/>
+                <entry key="zh_TW" value="en"/>
+                <entry key="zh_HANT" value="en"/>
+                <entry key="pt_PT" value="en"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="CompressingFilter" class="com.github.ziplet.filter.compression.CompressingFilter"/>
+    <bean id="componentCacheFilter" class="com.emc.xcp.ui.ResponseCachingFilter">
+        <property name="cacheSeconds" value="#{runtimeConfig.ComponentResourceCacheSeconds}" />
+    </bean>
+</beans>

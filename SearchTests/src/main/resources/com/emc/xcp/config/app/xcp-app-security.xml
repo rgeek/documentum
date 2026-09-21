@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans    http://www.springframework.org/schema/beans/spring-beans.xsd
+	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                        http://www.springframework.org/schema/security https://www.springframework.org/schema/security/spring-security.xsd
+                        http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd">
+    <global-method-security pre-post-annotations="enabled" />
+
+    <context:property-placeholder ignore-resource-not-found="true" ignore-unresolvable="true" location="classpath:rest-api-runtime.properties"/>
+
+    <beans:bean id="exceptionHandlerExceptionResolver"
+                class="com.emc.xcp.rest.security.exception.XcpRestSecurityHandlerExceptionResolver">
+    </beans:bean>
+
+    <beans:bean id="repositoryInfoFilter"
+                class="com.emc.xcp.rest.security.filter.RepositoryInfoFilter" >
+    </beans:bean>
+    <beans:bean id="csrfAuthFilter" class ="com.emc.xcp.rest.security.filter.CSRFTokenFilter"/>
+    <beans:import resource="classpath*:META-INF/spring/template/dctm-xcp-ui-security-${rest.security.auth.mode:basic}.xml" />
+    <beans:bean id="runtimeProperties"
+                class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <beans:property name="locations">
+            <beans:list>
+                <beans:value>classpath*:rest-api-runtime.properties</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean id="httpSecurityFilter" class="com.emc.xcp.rest.security.filter.HttpSecurityFilter" >
+        <beans:property name="runtimeProperties" ref="runtimeProperties" />
+    </beans:bean>
+
+    <!-- Uncomment the below section to support username containing "/" -->
+    <!-- <beans:bean id="allowUrlEncodedSlashFirewall" class="org.springframework.security.web.firewall.StrictHttpFirewall">
+        <beans:property name="allowUrlEncodedSlash" value="true"/>
+        <beans:property name="allowUrlEncodedPercent" value="true"/>
+    </beans:bean>
+    <http-firewall ref="allowUrlEncodedSlashFirewall"/> -->
+
+</beans:beans>

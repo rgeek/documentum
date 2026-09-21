@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/application_parameter.page" categoryId="com.emc.xcp.artifact.page" name="application_parameter" label="Manage Application Parameters" templateType="admin" templateScope="SYSTEM" isViewPage="false" isIconButton="false">
+  <title exprStr="Manage Application Parameters"/>
+  <rootContainer>
+    <properties name="xcpId" value="root"/>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title" value=""/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
+      <properties name="hidden" value=""/>
+      <properties name="cls" value=""/>
+      <properties name="ariaRole" value="main"/>
+      <properties name="xcpId" value="column_box"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
+        <properties name="orientation" value="Horizontal"/>
+        <properties name="width" value="100%"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="labelWidth" value="50" type="INTEGER"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="bottom"/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnhbox"/>
+        <children componentDefinitionId="xcp_rich_text">
+          <properties name="cls" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="mandatory" value=""/>
+          <properties name="hideErrorInToolTip" value="Rich Text (Expression)" type="BOOLEAN"/>
+          <properties name="stopOnValidationFail" value="true" type="BOOLEAN"/>
+          <properties name="tooltip" value=""/>
+          <properties name="html" value="&lt;div style=&quot;font-weight:bold;color:#363636;font-size:20px;padding-top:16;padding-bottom:16;&quot;>Application Parameters&lt;/div>"/>
+          <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'&lt;div style=&quot;font-weight:bold;color:#363636;font-size:20px;padding-top:16;padding-bottom:16;&quot;>Application Parameters&lt;/div>'"/>
+          <properties name="valid" value=""/>
+          <properties name="xcpId" value="rich_text"/>
+        </children>
+      </children>
+    </children>
+    <children componentDefinitionId="xcp_app_param_container">
+      <properties name="xcpId" value="app_param_container"/>
+    </children>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title" value=""/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
+      <properties name="hidden" value=""/>
+      <properties name="cls" value=""/>
+      <properties name="ariaRole" value="region"/>
+      <properties name="xcpId" value="column_box1"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
+        <properties name="orientation" value="Horizontal"/>
+        <properties name="width" value="100%"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="labelWidth" value="50" type="INTEGER"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="right"/>
+        <properties name="valign" value="top"/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnhbox1"/>
+        <children componentDefinitionId="xcp_button">
+          <properties name="text" value="Save"/>
+          <properties name="ariaLabel" value="Save"/>
+          <properties name="scale" value="small"/>
+          <properties name="badgeText" value=""/>
+          <properties name="badgeAlign" value="top-right"/>
+          <properties name="imageSource" value=""/>
+          <properties name="glyph" value=""/>
+          <properties name="iconAlign" value="left"/>
+          <properties name="tooltip" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="action">
+            <action>
+              <properties name="actionType" value="updateparameters"/>
+            </action>
+          </properties>
+          <properties name="width" value="" type="INTEGER"/>
+          <properties name="height" value="" type="INTEGER"/>
+          <properties name="cls" value=""/>
+          <properties name="preventRefocus" value="" type="BOOLEAN"/>
+          <properties name="disabled" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="xcpId" value="button"/>
+        </children>
+        <children componentDefinitionId="xcp_button">
+          <properties name="text" value="Cancel"/>
+          <properties name="ariaLabel" value="Cancel"/>
+          <properties name="scale" value="small"/>
+          <properties name="badgeText" value=""/>
+          <properties name="badgeAlign" value="top-right"/>
+          <properties name="imageSource" value=""/>
+          <properties name="glyph" value=""/>
+          <properties name="iconAlign" value="left"/>
+          <properties name="tooltip" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="action">
+            <action>
+              <properties name="redirectStyle" value="specified"/>
+              <properties name="actionType" value="xcp_gotopage"/>
+            </action>
+          </properties>
+          <properties name="width" value="" type="INTEGER"/>
+          <properties name="height" value="" type="INTEGER"/>
+          <properties name="cls" value=""/>
+          <properties name="preventRefocus" value="" type="BOOLEAN"/>
+          <properties name="disabled" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="xcpId" value="cancel_goto_homepage"/>
+        </children>
+      </children>
+    </children>
+  </rootContainer>
+</uitemplate:Page>

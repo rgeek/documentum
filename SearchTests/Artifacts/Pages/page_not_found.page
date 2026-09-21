@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/page_not_found.page" categoryId="com.emc.xcp.artifact.page" name="page_not_found" label="System 404 Page" templateType="admin" templateScope="SYSTEM" isViewPage="false" isIconButton="false">
+  <title exprStr="System 404 Page"/>
+  <rootContainer>
+    <properties name="xcpId" value="root"/>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title" value=""/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
+      <properties name="hidden" value=""/>
+      <properties name="cls" value=""/>
+      <properties name="ariaRole" value="region"/>
+      <properties name="xcpId" value="column_box"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+        <properties name="orientation" value="Vertical"/>
+        <properties name="width" value=""/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="labelWidth" value="150" type="INTEGER"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="top"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnvbox"/>
+      </children>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+        <properties name="orientation" value="Vertical"/>
+        <properties name="width" value="500"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="labelWidth" value="150" type="INTEGER"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="top"/>
+        <properties name="defaultMargins" value="50 0 5 5"/>
+        <properties name="margins" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnvbox1"/>
+        <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+          <properties name="title" value=""/>
+          <properties name="collapsible" value="false" type="BOOLEAN"/>
+          <properties name="collapsed" value=""/>
+          <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+          <properties name="border" value="false" type="BOOLEAN"/>
+          <properties name="defaultMargins" value="5"/>
+          <properties name="margins" value=""/>
+          <properties name="layout" value="xcp_columnbox"/>
+          <properties name="hidden" value=""/>
+          <properties name="cls" value="x-window-default"/>
+          <properties name="ariaRole" value="region"/>
+          <properties name="xcpId" value="column_box1"/>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+            <properties name="orientation" value="Vertical"/>
+            <properties name="width" value=""/>
+            <properties name="minWidth" value="" type="INTEGER"/>
+            <properties name="split" value="" type="BOOLEAN"/>
+            <properties name="overflow_x" value="hidden"/>
+            <properties name="labelWidth" value="150" type="INTEGER"/>
+            <properties name="labelAlign" value="left"/>
+            <properties name="halign" value="left"/>
+            <properties name="valign" value="top"/>
+            <properties name="defaultMargins" value="5"/>
+            <properties name="margins" value=""/>
+            <properties name="tooltip" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="xcpId" value="columnvbox3"/>
+            <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+              <properties name="title" value=""/>
+              <properties name="collapsible" value="false" type="BOOLEAN"/>
+              <properties name="collapsed" value=""/>
+              <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+              <properties name="border" value="false" type="BOOLEAN"/>
+              <properties name="defaultMargins" value="5"/>
+              <properties name="margins" value=""/>
+              <properties name="layout" value="xcp_columnbox"/>
+              <properties name="hidden" value=""/>
+              <properties name="cls" value=""/>
+              <properties name="ariaRole" value="region"/>
+              <properties name="xcpId" value="column_box2"/>
+              <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+                <properties name="orientation" value="Vertical"/>
+                <properties name="width" value=""/>
+                <properties name="minWidth" value="" type="INTEGER"/>
+                <properties name="split" value="" type="BOOLEAN"/>
+                <properties name="overflow_x" value="hidden"/>
+                <properties name="labelWidth" value="150" type="INTEGER"/>
+                <properties name="labelAlign" value="left"/>
+                <properties name="halign" value="left"/>
+                <properties name="valign" value="top"/>
+                <properties name="defaultMargins" value="5"/>
+                <properties name="margins" value=""/>
+                <properties name="tooltip" value=""/>
+                <properties name="cls" value=""/>
+                <properties name="xcpId" value="columnvbox4"/>
+                <children componentDefinitionId="xcp_rich_text">
+                  <properties name="cls" value=""/>
+                  <properties name="hidden" value=""/>
+                  <properties name="mandatory" value=""/>
+                  <properties name="hideErrorInToolTip" value="Rich Text (Expression)" type="BOOLEAN"/>
+                  <properties name="stopOnValidationFail" value="true" type="BOOLEAN"/>
+                  <properties name="tooltip" value=""/>
+                  <properties name="html" value="'&lt;span class=&amp;quot;x-window-header-text-default&amp;quot;>The page you requested was not found.&lt;/span>'"/>
+                  <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'&lt;span class=&amp;quot;x-window-header-text-default&amp;quot;>The page you requested was not found.&lt;/span>'"/>
+                  <properties name="valid" value=""/>
+                  <properties name="xcpId" value="header"/>
+                </children>
+                <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+                  <properties name="title" value=""/>
+                  <properties name="collapsible" value="false" type="BOOLEAN"/>
+                  <properties name="collapsed" value=""/>
+                  <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+                  <properties name="border" value="false" type="BOOLEAN"/>
+                  <properties name="defaultMargins" value="5"/>
+                  <properties name="margins" value=""/>
+                  <properties name="layout" value="xcp_columnbox"/>
+                  <properties name="hidden" value=""/>
+                  <properties name="cls" value=""/>
+                  <properties name="ariaRole" value="region"/>
+                  <properties name="xcpId" value="column_box3"/>
+                  <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+                    <properties name="orientation" value="Vertical"/>
+                    <properties name="width" value="37"/>
+                    <properties name="minWidth" value="" type="INTEGER"/>
+                    <properties name="split" value="" type="BOOLEAN"/>
+                    <properties name="overflow_x" value="hidden"/>
+                    <properties name="labelWidth" value="150" type="INTEGER"/>
+                    <properties name="labelAlign" value="left"/>
+                    <properties name="halign" value="left"/>
+                    <properties name="valign" value="top"/>
+                    <properties name="defaultMargins" value="5"/>
+                    <properties name="margins" value=""/>
+                    <properties name="tooltip" value=""/>
+                    <properties name="cls" value=""/>
+                    <properties name="xcpId" value="columnvbox5"/>
+                    <children componentDefinitionId="xcp_image">
+                      <properties name="alt" value=""/>
+                      <properties name="imageSource" value="urn:xcpcomm:com.emc.xcp.artifact.resource.image:Artifacts/Resources/error_32.png"/>
+                      <properties name="tooltip" value=""/>
+                      <properties name="width" value="" type="INTEGER"/>
+                      <properties name="height" value="" type="INTEGER"/>
+                      <properties name="disabled" value=""/>
+                      <properties name="hidden" value=""/>
+                      <properties name="cls" value=""/>
+                      <properties name="navType" value="none"/>
+                      <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+                      <properties name="navPageIdExpr" value=""/>
+                      <properties name="navUrlExpr" value=""/>
+                      <properties name="navObjectId" value=""/>
+                      <properties name="navToNewTab" value="" type="BOOLEAN"/>
+                      <properties name="navNewTabTarget" value=""/>
+                      <properties name="navUrlParams" value=""/>
+                      <properties name="xcpId" value="warning_icon"/>
+                    </children>
+                  </children>
+                  <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+                    <properties name="orientation" value="Vertical"/>
+                    <properties name="width" value=""/>
+                    <properties name="minWidth" value="" type="INTEGER"/>
+                    <properties name="split" value="" type="BOOLEAN"/>
+                    <properties name="overflow_x" value="hidden"/>
+                    <properties name="labelWidth" value="150" type="INTEGER"/>
+                    <properties name="labelAlign" value="left"/>
+                    <properties name="halign" value="left"/>
+                    <properties name="valign" value="top"/>
+                    <properties name="defaultMargins" value="5"/>
+                    <properties name="margins" value=""/>
+                    <properties name="tooltip" value=""/>
+                    <properties name="cls" value=""/>
+                    <properties name="xcpId" value="columnvbox6"/>
+                    <children componentDefinitionId="xcp_rich_text">
+                      <properties name="cls" value=""/>
+                      <properties name="hidden" value=""/>
+                      <properties name="mandatory" value=""/>
+                      <properties name="hideErrorInToolTip" value="Rich Text (Expression)" type="BOOLEAN"/>
+                      <properties name="stopOnValidationFail" value="true" type="BOOLEAN"/>
+                      <properties name="tooltip" value=""/>
+                      <properties name="html" value="'This page either does not exist, or you do not have permissions to view it.'"/>
+                      <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'This page either does not exist, or you do not have permissions to view it.'"/>
+                      <properties name="valid" value=""/>
+                      <properties name="xcpId" value="information"/>
+                    </children>
+                  </children>
+                </children>
+              </children>
+            </children>
+          </children>
+        </children>
+        <children componentDefinitionId="xcp_rich_text">
+          <properties name="cls" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="mandatory" value=""/>
+          <properties name="hideErrorInToolTip" value="Rich Text (Expression)" type="BOOLEAN"/>
+          <properties name="stopOnValidationFail" value="true" type="BOOLEAN"/>
+          <properties name="tooltip" value=""/>
+          <properties name="html" value=""/>
+          <properties xsi:type="uitemplate:DataboundProperty" name="value" value=""/>
+          <properties name="valid" value=""/>
+          <properties name="xcpId" value="rich_text"/>
+        </children>
+      </children>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+        <properties name="orientation" value="Vertical"/>
+        <properties name="width" value=""/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="labelWidth" value="150" type="INTEGER"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="top"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnvbox2"/>
+      </children>
+    </children>
+  </rootContainer>
+</uitemplate:Page>

@@ -1,0 +1,20 @@
+<jboss-deployment-structure>
+	<deployment>
+
+		<dependencies>  
+			<module name="com.emc.xcp" /> 
+		</dependencies> 
+
+        <exclude-subsystems> 
+			<subsystem name="logging"/>
+        </exclude-subsystems>
+
+		<!-- Exclusions allow you to prevent the server from automatically adding some dependencies -->
+		<exclusions>
+			<module name="com.sun.xml.bind" />
+			<module name="javax.xml.bind.api" />
+			<module name="org.apache.log4j" />
+		</exclusions>
+
+	</deployment>
+</jboss-deployment-structure>
