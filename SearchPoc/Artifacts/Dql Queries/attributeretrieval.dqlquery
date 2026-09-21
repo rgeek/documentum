@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dqlquery:DqlQuery xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dqlquery="htttp://xcp.emc.com/dqlquery" xmlns:nsAttributeDatatypes="http://xcp.emc.com/attribute_datatypes" xmlns:nsDataserviceContract="http://xcp.emc.com/DataserviceContract" urn="urn:stp:com.emc.xcp.artifact.dqlquery:Artifacts/Dql Queries/attributeretrieval.dqlquery" categoryId="com.emc.xcp.artifact.dqlquery" name="attributeretrieval" label="AttributeRetrieval" implCategoryId="com.emc.xcp.artifact.dqlquery" dqlText="select label_text,attr_name,type_name,'equals' as operator, '' as filter_value from dmi_dd_attr_info where type_name='dm_document' and attr_name in ('object_name','keywords','authors','subject','title','r_creation_date','r_modify_date')&#xD;&#xA;union&#xD;&#xA;select label_text,attr_name,type_name,'contains' as operator, '' as filter_value from dmi_dd_attr_info where type_name='dm_document' and attr_name in ('object_name','keywords','authors','subject','title','r_creation_date','r_modify_date')" returnCount="true">
+  <outputs xsi:type="nsDataserviceContract:AttributeElement" name="label_text" label="label_text">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+  </outputs>
+  <outputs xsi:type="nsDataserviceContract:AttributeElement" name="attr_name" label="attr_name">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+  </outputs>
+  <outputs xsi:type="nsDataserviceContract:AttributeElement" name="type_name" label="type_name">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+  </outputs>
+  <outputs xsi:type="nsDataserviceContract:AttributeElement" name="operator" label="operator">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+  </outputs>
+  <outputs xsi:type="nsDataserviceContract:AttributeElement" name="filter_value" label="filter_value">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+  </outputs>
+  <defaultSort/>
+  <datasource categoryId="com.emc.xcp.artifact.dataservice.datasourcecontract" name="attributeretrieval" label="AttributeRetrieval" implCategoryId="com.emc.xcp.artifact.dqlquery">
+    <outputs xsi:type="nsDataserviceContract:AttributeElement" name="Result Count">
+      <attributeType xsi:type="nsAttributeDatatypes:IntegerType"/>
+    </outputs>
+    <outputs xsi:type="nsDataserviceContract:ArrayElement" name="Results">
+      <item xsi:type="nsDataserviceContract:StructureElement" name="Items">
+        <elements xsi:type="nsDataserviceContract:AttributeElement" name="label_text" label="label_text">
+          <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+        </elements>
+        <elements xsi:type="nsDataserviceContract:AttributeElement" name="attr_name" label="attr_name">
+          <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+        </elements>
+        <elements xsi:type="nsDataserviceContract:AttributeElement" name="type_name" label="type_name">
+          <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+        </elements>
+        <elements xsi:type="nsDataserviceContract:AttributeElement" name="operator" label="operator">
+          <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+        </elements>
+        <elements xsi:type="nsDataserviceContract:AttributeElement" name="filter_value" label="filter_value">
+          <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+        </elements>
+      </item>
+    </outputs>
+    <primaryElement/>
+  </datasource>
+</dqlquery:DqlQuery>

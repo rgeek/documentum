@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/application_master.page" categoryId="com.emc.xcp.artifact.page" name="application_master" label="Master" templateType="application_master" isViewPage="false" isIconButton="false">
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/application_master.page" categoryId="com.emc.xcp.artifact.page" name="application_master" label="Master" templateType="application_master" isViewPage="false" isIconButton="false">
   <title exprStr="appmaster_defpage"/>
   <rootContainer>
     <properties name="xcpId" value="root"/>
@@ -81,15 +81,19 @@
           <properties name="cls" value=""/>
           <properties name="xcpId" value="navigation_menu"/>
           <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
-            <properties name="text" value="Menu Item 1"/>
+            <properties name="text" value="Advanced Search"/>
             <properties name="iconCls" value=""/>
             <properties name="hidden" value=""/>
             <properties name="disabled" value=""/>
             <properties name="cls" value=""/>
             <properties name="tooltip" value=""/>
-            <properties name="ariaLabel" value="Menu Item 1"/>
-            <properties name="navType" value="none"/>
-            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+            <properties name="ariaLabel" value="Advanced Search"/>
+            <properties name="navType" value="page_static"/>
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value="stp_advanced_search">
+              <data selectionName="advanced_search" selectionLabel="Advanced Search">
+                <dataRef href="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/advanced_search.page#/"/>
+              </data>
+            </properties>
             <properties name="navPageIdExpr" value=""/>
             <properties name="navUrlExpr" value=""/>
             <properties name="navObjectId" value=""/>
@@ -97,42 +101,6 @@
             <properties name="navNewTabTarget" value=""/>
             <properties name="navUrlParams" value=""/>
             <properties name="xcpId" value="nav_button"/>
-          </children>
-          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
-            <properties name="text" value="Menu Item 2"/>
-            <properties name="iconCls" value=""/>
-            <properties name="hidden" value=""/>
-            <properties name="disabled" value=""/>
-            <properties name="cls" value=""/>
-            <properties name="tooltip" value=""/>
-            <properties name="ariaLabel" value="Menu Item 2"/>
-            <properties name="navType" value="none"/>
-            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
-            <properties name="navPageIdExpr" value=""/>
-            <properties name="navUrlExpr" value=""/>
-            <properties name="navObjectId" value=""/>
-            <properties name="navToNewTab" value="" type="BOOLEAN"/>
-            <properties name="navNewTabTarget" value=""/>
-            <properties name="navUrlParams" value=""/>
-            <properties name="xcpId" value="nav_button1"/>
-          </children>
-          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
-            <properties name="text" value="Menu Item 3"/>
-            <properties name="iconCls" value=""/>
-            <properties name="hidden" value=""/>
-            <properties name="disabled" value=""/>
-            <properties name="cls" value=""/>
-            <properties name="tooltip" value=""/>
-            <properties name="ariaLabel" value="Menu Item 3"/>
-            <properties name="navType" value="none"/>
-            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
-            <properties name="navPageIdExpr" value=""/>
-            <properties name="navUrlExpr" value=""/>
-            <properties name="navObjectId" value=""/>
-            <properties name="navToNewTab" value="" type="BOOLEAN"/>
-            <properties name="navNewTabTarget" value=""/>
-            <properties name="navUrlParams" value=""/>
-            <properties name="xcpId" value="nav_button2"/>
           </children>
           <children componentDefinitionId="xcp_user_button">
             <properties name="ariaLabel" value="user_button1"/>

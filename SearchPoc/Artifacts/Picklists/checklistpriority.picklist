@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nsPicklist:Picklist xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nsAttributeDatatypes="http://xcp.emc.com/attribute_datatypes" xmlns:nsPicklist="http://xcp.emc.com/picklist" urn="urn:stp:com.emc.xcp.artifact.picklist:Artifacts/Picklists/checklistpriority.picklist" categoryId="com.emc.xcp.artifact.picklist" name="checklistpriority" label="checklistpriority">
+  <type xsi:type="nsAttributeDatatypes:IntegerType"/>
+  <entries label="High" value="0"/>
+  <entries label="Medium" value="1"/>
+  <entries label="Low" value="2"/>
+</nsPicklist:Picklist>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/appmaster_defpage.page" categoryId="com.emc.xcp.artifact.page" name="appmaster_defpage" label="appmaster_defpage" templateType="application_master" isViewPage="false" isIconButton="false">
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/appmaster_defpage.page" categoryId="com.emc.xcp.artifact.page" name="appmaster_defpage" label="appmaster_defpage" templateType="application_master" isViewPage="false" isIconButton="false">
   <title exprStr="appmaster_defpage"/>
   <rootContainer>
     <properties name="xcpId" value="root"/>

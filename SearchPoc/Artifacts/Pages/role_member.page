@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:st:com.emc.xcp.artifact.page:Artifacts/Pages/manage_app_role.page" categoryId="com.emc.xcp.artifact.page" name="manage_app_role" label="Manage Application Roles" templateType="admin" templateScope="SYSTEM" isViewPage="false" isIconButton="false">
-  <title exprStr="Manage Application Roles"/>
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/role_member.page" categoryId="com.emc.xcp.artifact.page" name="role_member" label="View Role Member" templateType="admin" templateScope="INSTANCE" isViewPage="false" isIconButton="false">
+  <title exprStr="View Role Member"/>
   <rootContainer>
     <properties name="xcpId" value="root"/>
     <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
@@ -31,66 +31,29 @@
         <properties name="tooltip" value=""/>
         <properties name="cls" value=""/>
         <properties name="xcpId" value="columnhbox"/>
-        <children componentDefinitionId="xcp_rich_text">
-          <properties name="cls" value=""/>
-          <properties name="hidden" value=""/>
-          <properties name="mandatory" value=""/>
-          <properties name="hideErrorInToolTip" value="Rich Text (Expression)" type="BOOLEAN"/>
-          <properties name="stopOnValidationFail" value="true" type="BOOLEAN"/>
-          <properties name="tooltip" value=""/>
-          <properties name="html" value="&lt;b>Manage Application Roles&lt;/b>"/>
-          <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'&lt;b>Manage Application Roles&lt;/b>'"/>
-          <properties name="valid" value=""/>
-          <properties name="xcpId" value="rich_text"/>
+        <children componentDefinitionId="xcp_breadcrumb">
+          <properties name="text" value="&lt;b>Application Roles&lt;/b>"/>
+          <properties name="sub_text" value="&lt;b>Manage Role Members&lt;/b>"/>
+          <properties xsi:type="uitemplate:DataboundProperty" name="xcp_nav_url" value="st_manage_app_role"/>
+          <properties name="xcp_data_path" value="application/role/"/>
+          <properties name="xcpId" value="breadcrumb"/>
         </children>
       </children>
     </children>
-    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_results_list">
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_admin_results_list">
       <properties name="title" value=""/>
-      <properties name="typeName" value="role"/>
-      <properties name="modelName" value="roles"/>
-      <properties name="storeId" value="rolesStore"/>
-      <properties name="initParams" value=""/>
-      <properties name="selectionModelName" value=""/>
-      <properties name="pageSize" value="10" type="INTEGER"/>
-      <properties name="hidden" value=""/>
-      <properties xsi:type="uitemplate:ArrayProperty" name="facets"/>
-      <properties xsi:type="uitemplate:ArrayProperty" name="facetLabels"/>
-      <properties name="selectionModel" value="false" type="BOOLEAN"/>
-      <properties name="cls" value=""/>
-      <properties name="enableDragDrop" value="true" type="BOOLEAN"/>
-      <properties name="disableNavigationOnFirstColumn" value="false" type="BOOLEAN"/>
-      <properties name="hideContextMenu" value=""/>
-      <properties name="allowDeselect" value="false" type="BOOLEAN"/>
-      <properties name="displayTotalRowCount" value="false" type="BOOLEAN"/>
-      <properties name="autoTotalCount" value="true" type="BOOLEAN"/>
-      <properties name="totalRowCountExpression" value=""/>
-      <properties name="autoSelection" value="false" type="BOOLEAN"/>
-      <properties name="pageSizeList" value="10,25,50,100"/>
-      <properties name="stateful" value="false" type="BOOLEAN"/>
-      <properties name="stateid" value=""/>
-      <properties name="setFacets" value=""/>
-      <properties name="allowInLineEdit" value="false" type="BOOLEAN"/>
-      <properties name="dataSourceType" value=""/>
-      <properties name="dataInstance" value=""/>
-      <properties name="modelStore" value=""/>
-      <properties name="width" value="" type="INTEGER"/>
-      <properties name="height" value="" type="INTEGER"/>
-      <properties name="enableInlineContextMenu" value="true" type="BOOLEAN"/>
-      <properties name="enableRightClickContextMenu" value="false" type="BOOLEAN"/>
-      <properties name="hideadd" value=""/>
-      <properties name="hideremove" value=""/>
-      <properties name="hidemovebtn" value=""/>
-      <properties name="disableadd" value=""/>
-      <properties name="disableremove" value=""/>
-      <properties name="disablemovebtn" value=""/>
-      <properties name="xcpId" value="results_list"/>
-      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_results_list_page_link_column">
-        <properties name="text" value="Name"/>
+      <properties name="typeName" value="RoleMember"/>
+      <properties name="modelName" value="xcp.admin.model.RoleMember"/>
+      <properties name="pageSize" value="25" type="INTEGER"/>
+      <properties name="storeId" value="roleMembersStore"/>
+      <properties name="selectionModelName" value="xcp.admin.selection.CheckboxModel"/>
+      <properties name="xcpId" value="admin_results_list"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_results_list_column">
+        <properties name="text" value="Member"/>
         <properties name="width" value="150" type="INTEGER"/>
         <properties name="minWidth" value="" type="INTEGER"/>
         <properties name="valueExpr" value=""/>
-        <properties name="valueType" value=""/>
+        <properties name="valueType" value="STRING"/>
         <properties name="isRepeating" value="false" type="BOOLEAN"/>
         <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
           <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
@@ -126,11 +89,87 @@
         <properties name="navToNewTab" value="" type="BOOLEAN"/>
         <properties name="navNewTabTarget" value=""/>
         <properties name="navUrlParams" value=""/>
-        <properties name="xcpId" value="results_list_page_link_column"/>
+        <properties name="xcpId" value="results_list_column"/>
+      </children>
+      <children componentDefinitionId="xcp_results_list_email_link_column">
+        <properties name="text" value="Email"/>
+        <properties name="width" value=""/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="valueExpr" value=""/>
+        <properties name="valueType" value=""/>
+        <properties name="hidden" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="dataIndex" value="email"/>
+        <properties name="hideable" value="true" type="BOOLEAN"/>
+        <properties name="resizable" value="true" type="BOOLEAN"/>
+        <properties name="draggable" value="true" type="BOOLEAN"/>
+        <properties name="parentxcpId" value=""/>
+        <properties name="stateful" value="" type="BOOLEAN"/>
+        <properties name="imageSourceExpr" value=""/>
+        <properties name="imageSource" value=""/>
+        <properties name="isExprImageSource" value="false" type="BOOLEAN"/>
+        <properties name="imagewidth" value="" type="INTEGER"/>
+        <properties name="imageheight" value="" type="INTEGER"/>
+        <properties name="ariaLabel" value="Label"/>
+        <properties name="navType" value="none"/>
+        <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+        <properties xsi:type="uitemplate:ObjectProperty" name="format">
+          <formatter/>
+        </properties>
+        <properties name="navPageIdExpr" value=""/>
+        <properties name="navUrlExpr" value=""/>
+        <properties name="navObjectId" value=""/>
+        <properties name="navToNewTab" value="" type="BOOLEAN"/>
+        <properties name="navNewTabTarget" value=""/>
+        <properties name="navUrlParams" value=""/>
+        <properties name="xcpId" value="results_list_email_link_column"/>
+      </children>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_results_list_column">
+        <properties name="text" value="Type"/>
+        <properties name="width" value="150" type="INTEGER"/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="valueExpr" value=""/>
+        <properties name="valueType" value="xcp.picklist._xcpMemberTypes"/>
+        <properties name="isRepeating" value="false" type="BOOLEAN"/>
+        <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
+          <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
+            <properties name="xtype" value="xcp_repeating_attribute_formatter"/>
+            <properties name="separatorStyle" value="NEWLINE"/>
+            <properties name="separator" value="COMMA"/>
+          </formatter>
+        </properties>
+        <properties name="sortable" value="false" type="BOOLEAN"/>
+        <properties name="menuDisabled" value="true" type="BOOLEAN"/>
+        <properties name="hidden" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="dataIndex" value="type"/>
+        <properties name="hideable" value="true" type="BOOLEAN"/>
+        <properties name="resizable" value="true" type="BOOLEAN"/>
+        <properties name="draggable" value="true" type="BOOLEAN"/>
+        <properties name="parentxcpId" value=""/>
+        <properties name="stateful" value="" type="BOOLEAN"/>
+        <properties name="imageSourceExpr" value=""/>
+        <properties name="imageSource" value=""/>
+        <properties name="isExprImageSource" value="false" type="BOOLEAN"/>
+        <properties name="imagewidth" value="" type="INTEGER"/>
+        <properties name="imageheight" value="" type="INTEGER"/>
+        <properties name="ariaLabel" value="Label"/>
+        <properties name="navType" value="none"/>
+        <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value=""/>
+        <properties xsi:type="uitemplate:ObjectProperty" name="format">
+          <formatter/>
+        </properties>
+        <properties name="navPageIdExpr" value=""/>
+        <properties name="navUrlExpr" value=""/>
+        <properties name="navObjectId" value=""/>
+        <properties name="navToNewTab" value="" type="BOOLEAN"/>
+        <properties name="navNewTabTarget" value=""/>
+        <properties name="navUrlParams" value=""/>
+        <properties name="xcpId" value="results_list_column1"/>
       </children>
       <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_results_list_column">
         <properties name="text" value="Description"/>
-        <properties name="width" value="" type="INTEGER"/>
+        <properties name="width" value="150" type="INTEGER"/>
         <properties name="minWidth" value="" type="INTEGER"/>
         <properties name="valueExpr" value=""/>
         <properties name="valueType" value="STRING"/>
@@ -169,7 +208,7 @@
         <properties name="navToNewTab" value="" type="BOOLEAN"/>
         <properties name="navNewTabTarget" value=""/>
         <properties name="navUrlParams" value=""/>
-        <properties name="xcpId" value="results_list_column"/>
+        <properties name="xcpId" value="results_list_column2"/>
       </children>
     </children>
   </rootContainer>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>st</groupId>
-    <artifactId>SearchTests</artifactId>
+    <groupId>stp</groupId>
+    <artifactId>SearchPoc</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>SearchTests</name>
+    <name>SearchPoc</name>
     <description/>
     <url>http://www.emc.com/xcp</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <creationDate>2026-09-18T12:40:09.007+0530</creationDate>
+        <creationDate>2026-09-21T06:03:25.697+0000</creationDate>
     </properties>
     <build>
-        <finalName>st-SearchTests-1.0.0</finalName>
+        <finalName>stp-SearchPoc-1.0.0</finalName>
         <plugins>
             <plugin>
                 <groupId>com.emc.xcp.builder</groupId>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ApplicationConfiguration application-name="SearchTests" namespace="st" version="1.0.0" description="" isbpm="false">
+<ApplicationConfiguration application-name="SearchPoc" namespace="stp" version="1.0.0" description="" isbpm="false">
     <configuration type="STRING" name="ctfworkingdirectory" namespace="st" id="com.emc.xcp.artifact.appparameter">
         <property name="value">C:\fakepath</property>
     </configuration>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rtappconfig:RuntimeAppConfig xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:rtappconfig="http://www.emc.com/xcp2/2010/rtappconfig" urn="urn:stp:com.emc.xcp.artifact.rtappconfig:Artifacts/Runtime App Configurations/runtimeappconfig.rtappconfig" categoryId="com.emc.xcp.artifact.rtappconfig" name="runtimeappconfig" label="runtimeappconfig">
+  <defaultHomePage href="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/advanced_search.page#/"/>
+  <appTitle exprStr="SearchPoc"/>
+  <defaultHomePageExpression/>
+  <objectIdExpression/>
+  <minWidth/>
+</rtappconfig:RuntimeAppConfig>

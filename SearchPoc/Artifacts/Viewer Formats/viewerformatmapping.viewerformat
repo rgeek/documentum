@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<nsviewerformat:Viewers xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:nsviewerformat="http://xcp2.emc.com/viewerformat" urn="urn:st:com.emc.xcp.artifact.viewermapping:Artifacts/Viewer Formats/viewerformatmapping.viewerformat" categoryId="com.emc.xcp.artifact.viewermapping" name="viewerformatmapping" label="Viewers and Formats">
+<nsviewerformat:Viewers xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:nsviewerformat="http://xcp2.emc.com/viewerformat" urn="urn:stp:com.emc.xcp.artifact.viewermapping:Artifacts/Viewer Formats/viewerformatmapping.viewerformat" categoryId="com.emc.xcp.artifact.viewermapping" name="viewerformatmapping" label="Viewers and Formats">
   <items name="VideoViewer" label="xCP Media Viewer">
     <supportedFormats>mpeg-4v</supportedFormats>
     <supportedFormats>ogg</supportedFormats>
