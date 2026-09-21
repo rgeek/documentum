@@ -102,6 +102,28 @@
             <properties name="navUrlParams" value=""/>
             <properties name="xcpId" value="nav_button"/>
           </children>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_nav_button">
+            <properties name="text" value="Full Text Search"/>
+            <properties name="iconCls" value=""/>
+            <properties name="hidden" value=""/>
+            <properties name="disabled" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="tooltip" value=""/>
+            <properties name="ariaLabel" value="Full Text Search"/>
+            <properties name="navType" value="page_static"/>
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value="stp_full_text_poc">
+              <data selectionName="full_text_poc" selectionLabel="Full Text POC">
+                <dataRef href="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/full_text_poc.page#/"/>
+              </data>
+            </properties>
+            <properties name="navPageIdExpr" value=""/>
+            <properties name="navUrlExpr" value=""/>
+            <properties name="navObjectId" value=""/>
+            <properties name="navToNewTab" value="true" type="BOOLEAN"/>
+            <properties name="navNewTabTarget" value=""/>
+            <properties name="navUrlParams" value=""/>
+            <properties name="xcpId" value="full_text_search"/>
+          </children>
           <children componentDefinitionId="xcp_user_button">
             <properties name="ariaLabel" value="user_button1"/>
             <properties name="cls" value="xcp-default-userButton"/>
