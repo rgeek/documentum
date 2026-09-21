@@ -1,9 +1,6 @@
 .index
 *.log
-.classpath
 target/
 META-INF/
 gen/
 .generatedresources
-.settings
-.project
