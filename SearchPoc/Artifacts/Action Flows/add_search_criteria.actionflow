@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionflow:ActionFlow xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" urn="urn:stp:com.emc.xcp.artifact.actionFlow:Artifacts/Action Flows/add_search_criteria.actionflow" categoryId="com.emc.xcp.artifact.actionFlow" name="add_search_criteria" label="Add Search Criteria" initialState="//@states[id='viewState_add_search_criteria']">
+<actionflow:ActionFlow xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" xmlns:nsAttributeDatatypes="http://xcp.emc.com/attribute_datatypes" urn="urn:stp:com.emc.xcp.artifact.actionFlow:Artifacts/Action Flows/add_search_criteria.actionflow" categoryId="com.emc.xcp.artifact.actionFlow" name="add_search_criteria" label="Add Search Criteria" initialState="//@states[id='viewState_add_search_criteria']">
+  <outputs xsi:type="actionflow:ActionFlowElement" name="output_json">
+    <attributeType xsi:type="nsAttributeDatatypes:StringType"/>
+    <defaultValue>
+      <expression exprStr=""/>
+    </defaultValue>
+  </outputs>
   <states xsi:type="actionflow:EndState" id="success"/>
   <states xsi:type="actionflow:EndState" id="error"/>
   <states xsi:type="actionflow:ActionState" id="finish">
@@ -10,6 +16,9 @@
   <states xsi:type="actionflow:ViewState" id="viewState_add_search_criteria">
     <transitions on="cancel" to="//@states[id='cancel']"/>
     <transitions on="finish" to="//@states[id='finish']"/>
+    <stepCondition>
+      <expression exprStr="false"/>
+    </stepCondition>
     <step href="urn:stp:com.emc.xcp.artifact.uistep:Artifacts/UI Steps/add_search_criteria.uistep#/"/>
   </states>
   <transitionLabels transition="finish" label="Finish">

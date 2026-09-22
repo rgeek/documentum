@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<actionflow:UIStep xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.uistep:Artifacts/UI Steps/add_search_criteria.uistep" categoryId="com.emc.xcp.artifact.uistep" name="add_search_criteria" label="Step 1" templateType="uistep">
+<actionflow:UIStep xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" xmlns:nsDataserviceContract="http://xcp.emc.com/DataserviceContract" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.uistep:Artifacts/UI Steps/add_search_criteria.uistep" categoryId="com.emc.xcp.artifact.uistep" name="add_search_criteria" label="Step 1" templateType="uistep">
+  <dataSources categoryId="com.emc.xcp.artifact.dataservice.datasource" name="attributeretrieval" label="AttributeRetrieval">
+    <contract xsi:type="nsDataserviceContract:DataSourceContract" href="urn:stp:com.emc.xcp.artifact.dqlquery:Artifacts/Dql Queries/attributeretrieval.dqlquery#//@datasource"/>
+  </dataSources>
+  <actionInstanceProperty actionInstance="//@dataSources[name='attributeretrieval']"/>
   <rootContainer>
     <properties name="xcpId" value="root"/>
     <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
@@ -60,16 +64,16 @@
             <properties name="cls" value=""/>
             <properties name="xcpId" value="columnvbox1"/>
             <properties name="items"/>
-            <children componentDefinitionId="xcp_dropdown_list">
+            <children componentDefinitionId="xcp_dropdown_list" dataService="//@dataSources[name='attributeretrieval']">
               <properties name="fieldLabel" value="Attribute"/>
               <properties name="ariaLabel" value="Label"/>
               <properties name="emptyText" value=""/>
               <properties name="disabled" value=""/>
               <properties name="timeToUpdate" value="400" type="INTEGER"/>
               <properties name="hidden" value=""/>
-              <properties name="valueField" value=""/>
-              <properties name="displayField" value=""/>
-              <properties name="modelStore" value=""/>
+              <properties name="valueField" value="attr_name"/>
+              <properties name="displayField" value="label_text"/>
+              <properties name="modelStore" value="dataservices.attributeretrieval"/>
               <properties name="valueType" value="STRING"/>
               <properties name="name" value=""/>
               <properties name="fieldWidth" value="" type="INTEGER"/>
@@ -100,16 +104,16 @@
             <properties name="cls" value=""/>
             <properties name="xcpId" value="columnvbox2"/>
             <properties name="items"/>
-            <children componentDefinitionId="xcp_dropdown_list">
+            <children componentDefinitionId="xcp_dropdown_list" dataService="//@dataSources[name='attributeretrieval']">
               <properties name="fieldLabel" value="Operator"/>
               <properties name="ariaLabel" value="Label"/>
               <properties name="emptyText" value=""/>
               <properties name="disabled" value=""/>
               <properties name="timeToUpdate" value="400" type="INTEGER"/>
               <properties name="hidden" value=""/>
-              <properties name="valueField" value=""/>
-              <properties name="displayField" value=""/>
-              <properties name="modelStore" value=""/>
+              <properties name="valueField" value="operator"/>
+              <properties name="displayField" value="operator"/>
+              <properties name="modelStore" value="dataservices.attributeretrieval"/>
               <properties name="valueType" value="STRING"/>
               <properties name="name" value=""/>
               <properties name="fieldWidth" value="" type="INTEGER"/>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/advanced_search.page" categoryId="com.emc.xcp.artifact.page" name="advanced_search" label="Advanced Search" templateType="application" isViewPage="false" isIconButton="false">
+<uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:actionflow="http://www.emc.com/xcp2/2010/actionflow" xmlns:nsDataserviceContract="http://xcp.emc.com/DataserviceContract" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/advanced_search.page" categoryId="com.emc.xcp.artifact.page" name="advanced_search" label="Advanced Search" templateType="application" isViewPage="false" isIconButton="false">
+  <dataSources categoryId="com.emc.xcp.artifact.dataservice.datasource" name="fetchcontenttypes_initiate_staless_ds" label="Fetch Content Types">
+    <contract xsi:type="nsDataserviceContract:DataSourceContract" href="urn:xcp:com.emc.ide.artifact.process:Artifacts/Processes/fetchcontenttypes.process#//@activities[name='Initiate']/@taskContract/@dataServiceContracts[name='fetchcontenttypes_initiate_staless_ds']"/>
+  </dataSources>
   <actions categoryId="com.emc.xcp.artifact.dataservice.actioninstance" name="add_search_criteria_1" label="Add Search Criteria-1">
     <contract xsi:type="actionflow:ActionFlow" href="urn:stp:com.emc.xcp.artifact.actionFlow:Artifacts/Action Flows/add_search_criteria.actionflow#/"/>
   </actions>
   <actionInstanceProperty actionInstance="//@actions[name='add_search_criteria_1']"/>
+  <actionInstanceProperty actionInstance="//@dataSources[name='fetchcontenttypes_initiate_staless_ds']"/>
   <title exprStr="Advanced Search"/>
   <rootContainer>
     <properties name="xcpId" value="root"/>
@@ -64,16 +68,16 @@
             <properties name="tooltip" value=""/>
             <properties name="cls" value=""/>
             <properties name="xcpId" value="columnvbox4"/>
-            <children componentDefinitionId="xcp_dropdown_list">
+            <children componentDefinitionId="xcp_dropdown_list" dataService="//@dataSources[name='fetchcontenttypes_initiate_staless_ds']">
               <properties name="fieldLabel" value="Type"/>
               <properties name="ariaLabel" value="Type"/>
               <properties name="emptyText" value=""/>
               <properties name="disabled" value=""/>
               <properties name="timeToUpdate" value="400" type="INTEGER"/>
               <properties name="hidden" value=""/>
-              <properties name="valueField" value=""/>
-              <properties name="displayField" value=""/>
-              <properties name="modelStore" value=""/>
+              <properties name="valueField" value="content_types"/>
+              <properties name="displayField" value="content_types"/>
+              <properties name="modelStore" value="dataservices.fetchcontenttypes_initiate_staless_ds"/>
               <properties name="valueType" value="STRING"/>
               <properties name="name" value=""/>
               <properties name="fieldWidth" value="" type="INTEGER"/>

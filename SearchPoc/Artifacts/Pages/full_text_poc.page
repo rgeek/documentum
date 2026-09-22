@@ -162,8 +162,22 @@
       <properties name="selectionModelName" value=""/>
       <properties name="pageSize" value="10" type="INTEGER"/>
       <properties name="hidden" value=""/>
-      <properties xsi:type="uitemplate:ArrayProperty" name="facets"/>
-      <properties xsi:type="uitemplate:ArrayProperty" name="facetLabels"/>
+      <properties xsi:type="uitemplate:ArrayProperty" name="facets">
+        <values>facet_name</values>
+        <values>facet_owner</values>
+        <values>facet_status</values>
+        <values>facet_subject</values>
+        <values>facet_title</values>
+        <values>facet_created_on</values>
+      </properties>
+      <properties xsi:type="uitemplate:ArrayProperty" name="facetLabels">
+        <values>Name</values>
+        <values>Owner</values>
+        <values>Status</values>
+        <values>Subject</values>
+        <values>Title</values>
+        <values>Created on</values>
+      </properties>
       <properties name="selectionModel" value="false" type="BOOLEAN"/>
       <properties name="cls" value=""/>
       <properties name="enableDragDrop" value="true" type="BOOLEAN"/>

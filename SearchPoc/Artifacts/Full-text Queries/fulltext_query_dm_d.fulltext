@@ -41,11 +41,6 @@
     <primaryElement>
       <dataModel href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
     </primaryElement>
-    <facets name="facet_name" label="Name">
-      <facetType xsi:type="nsDataserviceContract:AttributeDataTypeFacet">
-        <attributeType xsi:type="nsAttributeDatatypes:StringType" href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='object_name']/@type"/>
-      </facetType>
-    </facets>
     <facets name="facet_owner" label="Owner">
       <facetType xsi:type="nsDataserviceContract:AttributeDataTypeFacet">
         <attributeType xsi:type="nsAttributeDatatypes:StringType" href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#//@attributes[name='owner_name']/@type"/>
@@ -56,17 +51,27 @@
         <attributeType xsi:type="nsAttributeDatatypes:StringType" href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#//@attributes[name='a_status']/@type"/>
       </facetType>
     </facets>
-    <facets name="facet_subject" label="Subject">
-      <facetType xsi:type="nsDataserviceContract:AttributeDataTypeFacet">
-        <attributeType xsi:type="nsAttributeDatatypes:StringType" href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#//@attributes[name='subject']/@type"/>
-      </facetType>
-    </facets>
     <facets name="facet_title" label="Title">
       <facetType xsi:type="nsDataserviceContract:AttributeDataTypeFacet">
         <attributeType xsi:type="nsAttributeDatatypes:StringType" href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#//@attributes[name='title']/@type"/>
       </facetType>
     </facets>
-    <facets name="facet_created_on" label="Created on">
+    <facets name="facet_created_on" label="Created on (Days)">
+      <facetType xsi:type="nsDataserviceContract:FixedDateTypeFacet"/>
+    </facets>
+    <facets name="facet_created_on_" label="Created on (Weeks)">
+      <facetType xsi:type="nsDataserviceContract:FixedDateTypeFacet" frequency="week"/>
+    </facets>
+    <facets name="facet_created_on__" label="Created on (Months)">
+      <facetType xsi:type="nsDataserviceContract:FixedDateTypeFacet" frequency="month"/>
+    </facets>
+    <facets name="facet_created_on___" label="Created on (Quarters)">
+      <facetType xsi:type="nsDataserviceContract:FixedDateTypeFacet" frequency="quarter"/>
+    </facets>
+    <facets name="facet_created_on____" label="Created on (Years)">
+      <facetType xsi:type="nsDataserviceContract:FixedDateTypeFacet" frequency="year"/>
+    </facets>
+    <facets name="facet_created_on_____" label="Created on (Grouped)">
       <facetType xsi:type="nsDataserviceContract:EnumTypeFacet">
         <type xsi:type="nsAttributeDatatypes:DateTimeType"/>
         <entries value="THIS_WEEK" label="This Week"/>
@@ -130,16 +135,6 @@
   </columns>
   <defaultSort ascending="true"/>
   <dataType xsi:type="nsDatatypes:Document" href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
-  <filters xsi:type="fulltext:StringFilter" name="name" label="Name" orderBy="FREQUENCY">
-    <contextSelection>
-      <parentRef selectionType="MODEL">
-        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
-      </parentRef>
-      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='object_name']"/>
-    </contextSelection>
-    <groupBy xsi:type="fulltext:StringGroupBy"/>
-    <applyCondition/>
-  </filters>
   <filters xsi:type="fulltext:StringFilter" name="owner" label="Owner" orderBy="FREQUENCY">
     <contextSelection>
       <parentRef selectionType="MODEL">
@@ -160,16 +155,6 @@
     <groupBy xsi:type="fulltext:StringGroupBy"/>
     <applyCondition/>
   </filters>
-  <filters xsi:type="fulltext:StringFilter" name="subject" label="Subject" orderBy="FREQUENCY">
-    <contextSelection>
-      <parentRef selectionType="MODEL">
-        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
-      </parentRef>
-      <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#//@attributes[name='subject']"/>
-    </contextSelection>
-    <groupBy xsi:type="fulltext:StringGroupBy"/>
-    <applyCondition/>
-  </filters>
   <filters xsi:type="fulltext:StringFilter" name="title" label="Title" orderBy="FREQUENCY">
     <contextSelection>
       <parentRef selectionType="MODEL">
@@ -180,7 +165,57 @@
     <groupBy xsi:type="fulltext:StringGroupBy"/>
     <applyCondition/>
   </filters>
-  <filters xsi:type="fulltext:DateFilter" name="created_on" label="Created on" distinctValues="false">
+  <filters xsi:type="fulltext:DateFilter" name="created_on" label="Created on (Days)" distinctValues="false" orderBy="FREQUENCY">
+    <contextSelection selectionType="DATETIME">
+      <parentRef selectionType="MODEL">
+        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
+      </parentRef>
+      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='r_creation_date']"/>
+    </contextSelection>
+    <groupBy xsi:type="fulltext:DateGroupBy" range="DAYS"/>
+    <applyCondition/>
+  </filters>
+  <filters xsi:type="fulltext:DateFilter" name="created_on_" label="Created on (Weeks)" distinctValues="false" orderBy="FREQUENCY">
+    <contextSelection selectionType="DATETIME">
+      <parentRef selectionType="MODEL">
+        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
+      </parentRef>
+      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='r_creation_date']"/>
+    </contextSelection>
+    <groupBy xsi:type="fulltext:DateGroupBy" range="WEEKS"/>
+    <applyCondition/>
+  </filters>
+  <filters xsi:type="fulltext:DateFilter" name="created_on__" label="Created on (Months)" distinctValues="false" orderBy="FREQUENCY">
+    <contextSelection selectionType="DATETIME">
+      <parentRef selectionType="MODEL">
+        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
+      </parentRef>
+      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='r_creation_date']"/>
+    </contextSelection>
+    <groupBy xsi:type="fulltext:DateGroupBy" range="MONTHS"/>
+    <applyCondition/>
+  </filters>
+  <filters xsi:type="fulltext:DateFilter" name="created_on___" label="Created on (Quarters)" distinctValues="false" orderBy="FREQUENCY">
+    <contextSelection selectionType="DATETIME">
+      <parentRef selectionType="MODEL">
+        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
+      </parentRef>
+      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='r_creation_date']"/>
+    </contextSelection>
+    <groupBy xsi:type="fulltext:DateGroupBy" range="QUARTERS"/>
+    <applyCondition/>
+  </filters>
+  <filters xsi:type="fulltext:DateFilter" name="created_on____" label="Created on (Years)" distinctValues="false" orderBy="FREQUENCY">
+    <contextSelection selectionType="DATETIME">
+      <parentRef selectionType="MODEL">
+        <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
+      </parentRef>
+      <dataRef href="urn:xcp:com.emc.xcp.artifact.basetype:Artifacts/Base Type/basetype.basetype#//@attributes[name='r_creation_date']"/>
+    </contextSelection>
+    <groupBy xsi:type="fulltext:DateGroupBy" range="YEARS"/>
+    <applyCondition/>
+  </filters>
+  <filters xsi:type="fulltext:DateFilter" name="created_on_____" label="Created on (Grouped)" distinctValues="false">
     <contextSelection selectionType="DATETIME">
       <parentRef selectionType="MODEL">
         <dataRef href="urn:xcp:com.emc.xcp.artifact.doc:Artifacts/Content/dm_document.content#/"/>
