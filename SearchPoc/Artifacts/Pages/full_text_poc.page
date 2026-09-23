@@ -2,7 +2,7 @@
 <uitemplate:Page xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:nsDataserviceContract="http://xcp.emc.com/DataserviceContract" xmlns:uitemplate="http://www.emc.com/xcp2/2010/uitemplate" urn="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/full_text_poc.page" categoryId="com.emc.xcp.artifact.page" name="full_text_poc" label="Full Text POC" templateType="application" isViewPage="false" isIconButton="false">
   <dataSources categoryId="com.emc.xcp.artifact.dataservice.datasource" name="fulltext_query_dm_d" label="fulltext_query dm_document">
     <inputMappings name="q">
-      <expression exprStr="widgets.text_input.value"/>
+      <expression exprStr="widgets.text_input1.value"/>
     </inputMappings>
     <contract xsi:type="nsDataserviceContract:DataSourceContract" href="urn:stp:com.emc.xcp.artifact.search.fulltext:Artifacts/Full-text Queries/fulltext_query_dm_d.fulltext#//@datasource"/>
   </dataSources>
@@ -22,7 +22,7 @@
       <properties name="hidden" value=""/>
       <properties name="cls" value=""/>
       <properties name="ariaRole" value="region"/>
-      <properties name="xcpId" value="column_box"/>
+      <properties name="xcpId" value="column_box3"/>
       <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
         <properties name="orientation" value="Vertical"/>
         <properties name="width" value=""/>
@@ -37,7 +37,7 @@
         <properties name="margins" value=""/>
         <properties name="tooltip" value=""/>
         <properties name="cls" value=""/>
-        <properties name="xcpId" value="columnvbox"/>
+        <properties name="xcpId" value="columnvbox2"/>
         <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
           <properties name="title" value=""/>
           <properties name="collapsible" value="false" type="BOOLEAN"/>
@@ -50,10 +50,10 @@
           <properties name="hidden" value=""/>
           <properties name="cls" value=""/>
           <properties name="ariaRole" value="region"/>
-          <properties name="xcpId" value="column_box1"/>
-          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
-            <properties name="orientation" value="Horizontal"/>
-            <properties name="width"/>
+          <properties name="xcpId" value="column_box4"/>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+            <properties name="orientation" value="Vertical"/>
+            <properties name="width" value=""/>
             <properties name="minWidth" value="" type="INTEGER"/>
             <properties name="split" value="" type="BOOLEAN"/>
             <properties name="overflow_x" value="hidden"/>
@@ -64,17 +64,15 @@
             <properties name="defaultMargins" value="5"/>
             <properties name="margins" value=""/>
             <properties name="tooltip" value=""/>
-            <properties name="cls"/>
-            <properties name="xcpId" value="columnvbox1"/>
-            <properties name="xtype" value="xcp_columnhbox"/>
-            <properties name="items"/>
+            <properties name="cls" value=""/>
+            <properties name="xcpId" value="columnvbox3"/>
             <children componentDefinitionId="xcp_text_input" dataService="//@dataSources[name='fulltext_query_dm_d']">
               <properties name="fieldLabel" value="Full-Text"/>
               <properties name="ariaLabel" value="Label"/>
               <properties name="emptyText" value=""/>
               <properties name="name" value=""/>
               <properties name="hstretch" value="true" type="BOOLEAN"/>
-              <properties name="fieldWidth" value="450" type="INTEGER"/>
+              <properties name="fieldWidth" value="" type="INTEGER"/>
               <properties name="readOnly" value=""/>
               <properties name="hidden" value=""/>
               <properties name="valueType" value="STRING"/>
@@ -88,17 +86,47 @@
               <properties name="passwordField" value="false" type="BOOLEAN"/>
               <properties xsi:type="uitemplate:DataboundProperty" name="value" value=""/>
               <properties name="valid" value=""/>
-              <properties name="xcpId" value="text_input"/>
+              <properties name="xcpId" value="text_input1"/>
             </children>
+          </children>
+        </children>
+        <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+          <properties name="title" value=""/>
+          <properties name="collapsible" value="false" type="BOOLEAN"/>
+          <properties name="collapsed" value=""/>
+          <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+          <properties name="border" value="false" type="BOOLEAN"/>
+          <properties name="defaultMargins" value="5"/>
+          <properties name="margins" value=""/>
+          <properties name="layout" value="xcp_columnbox"/>
+          <properties name="hidden" value=""/>
+          <properties name="cls" value=""/>
+          <properties name="ariaRole" value="region"/>
+          <properties name="xcpId" value="column_box5"/>
+          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
+            <properties name="orientation" value="Horizontal"/>
+            <properties name="width" value=""/>
+            <properties name="minWidth" value="" type="INTEGER"/>
+            <properties name="overflow_x" value="hidden"/>
+            <properties name="split" value="" type="BOOLEAN"/>
+            <properties name="labelWidth" value="50" type="INTEGER"/>
+            <properties name="defaultMargins" value="5"/>
+            <properties name="margins" value=""/>
+            <properties name="labelAlign" value="left"/>
+            <properties name="halign" value="right"/>
+            <properties name="valign" value="top"/>
+            <properties name="tooltip" value=""/>
+            <properties name="cls" value=""/>
+            <properties name="xcpId" value="columnhbox1"/>
             <children componentDefinitionId="xcp_button" dataService="//@dataSources[name='fulltext_query_dm_d']">
               <properties name="text" value="Search"/>
               <properties name="ariaLabel" value="Button"/>
               <properties name="scale" value="small"/>
               <properties name="badgeText" value=""/>
-              <properties name="badgeAlign" value="top-center"/>
+              <properties name="badgeAlign" value="top-right"/>
               <properties name="imageSource" value=""/>
               <properties name="glyph" value=""/>
-              <properties name="iconAlign" value="right"/>
+              <properties name="iconAlign" value="left"/>
               <properties name="tooltip" value=""/>
               <properties xsi:type="uitemplate:ObjectProperty" name="action">
                 <action>
@@ -116,39 +144,8 @@
               <properties name="preventRefocus" value="" type="BOOLEAN"/>
               <properties name="disabled" value=""/>
               <properties name="hidden" value=""/>
-              <properties name="xcpId" value="button"/>
+              <properties name="xcpId" value="button1"/>
             </children>
-          </children>
-        </children>
-        <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
-          <properties name="title" value=""/>
-          <properties name="collapsible" value="false" type="BOOLEAN"/>
-          <properties name="collapsed" value=""/>
-          <properties name="collapseFirst" value="true" type="BOOLEAN"/>
-          <properties name="border" value="false" type="BOOLEAN"/>
-          <properties name="defaultMargins" value="5"/>
-          <properties name="margins" value=""/>
-          <properties name="layout" value="xcp_columnbox"/>
-          <properties name="hidden" value=""/>
-          <properties name="cls" value=""/>
-          <properties name="ariaRole" value="region"/>
-          <properties name="xcpId" value="column_box2"/>
-          <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnhbox">
-            <properties name="orientation" value="Horizontal"/>
-            <properties name="width" value=""/>
-            <properties name="minWidth" value="" type="INTEGER"/>
-            <properties name="overflow_x" value="hidden"/>
-            <properties name="split" value="" type="BOOLEAN"/>
-            <properties name="labelWidth" value="50" type="INTEGER"/>
-            <properties name="defaultMargins" value="5"/>
-            <properties name="margins" value=""/>
-            <properties name="labelAlign" value="left"/>
-            <properties name="halign" value="right"/>
-            <properties name="valign" value="top"/>
-            <properties name="tooltip" value=""/>
-            <properties name="cls" value=""/>
-            <properties name="xcpId" value="columnhbox"/>
-            <properties name="xtype" value="xcp_columnhbox"/>
           </children>
         </children>
       </children>
@@ -163,20 +160,26 @@
       <properties name="pageSize" value="10" type="INTEGER"/>
       <properties name="hidden" value=""/>
       <properties xsi:type="uitemplate:ArrayProperty" name="facets">
-        <values>facet_name</values>
         <values>facet_owner</values>
         <values>facet_status</values>
-        <values>facet_subject</values>
         <values>facet_title</values>
         <values>facet_created_on</values>
+        <values>facet_created_on_</values>
+        <values>facet_created_on__</values>
+        <values>facet_created_on___</values>
+        <values>facet_created_on____</values>
+        <values>facet_created_on_____</values>
       </properties>
       <properties xsi:type="uitemplate:ArrayProperty" name="facetLabels">
-        <values>Name</values>
         <values>Owner</values>
         <values>Status</values>
-        <values>Subject</values>
         <values>Title</values>
-        <values>Created on</values>
+        <values>Created on (Days)</values>
+        <values>Created on (Weeks)</values>
+        <values>Created on (Months)</values>
+        <values>Created on (Quarters)</values>
+        <values>Created on (Years)</values>
+        <values>Created on (Grouped)</values>
       </properties>
       <properties name="selectionModel" value="false" type="BOOLEAN"/>
       <properties name="cls" value=""/>
@@ -184,7 +187,7 @@
       <properties name="disableNavigationOnFirstColumn" value="false" type="BOOLEAN"/>
       <properties name="hideContextMenu" value=""/>
       <properties name="allowDeselect" value="false" type="BOOLEAN"/>
-      <properties name="displayTotalRowCount" value="false" type="BOOLEAN"/>
+      <properties name="displayTotalRowCount" value="true" type="BOOLEAN"/>
       <properties name="autoTotalCount" value="true" type="BOOLEAN"/>
       <properties name="totalRowCountExpression" value=""/>
       <properties name="autoSelection" value="false" type="BOOLEAN"/>
