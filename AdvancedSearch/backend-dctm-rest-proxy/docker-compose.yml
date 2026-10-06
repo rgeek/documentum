@@ -1,0 +1,30 @@
+# Standalone deploy of the Documentum proxy backend only.
+#
+# Usage (in the backend/ folder on the server):
+#
+#   cp .env.example .env
+#   # edit .env — at minimum set DCTM_REST_BASE
+#   docker compose up -d --build
+#
+# The proxy will be reachable at http://<server>:4000.
+services:
+  documentum-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: documentum-proxy
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      # Documentum REST base URL (includes the repository path).
+      - DCTM_REST_BASE=${DCTM_REST_BASE}
+      # Optional fallback credentials — leave blank to require the login page.
+      - DCTM_USER=${DCTM_USER}
+      - DCTM_PASS=${DCTM_PASS}
+      - PORT=4000
+      # Comma-separated list of origins allowed to call the proxy (CORS).
+      # Add whatever origins your frontend / clients are served from.
+      - FRONTEND_ORIGIN=${FRONTEND_ORIGIN:-http://localhost:5173,http://localhost:5090}
+      # Logging verbosity: silent | info | debug
+      - LOG_LEVEL=${LOG_LEVEL:-info}

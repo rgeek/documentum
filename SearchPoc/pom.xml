@@ -566,5 +566,13 @@
             <type>jar</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>tro</groupId>
+            <artifactId>trojsfunc</artifactId>
+            <version>24.2.1000.0010</version>
+            <type>jar</type>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/tro.trojsfunc-24.2.1000.0010.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

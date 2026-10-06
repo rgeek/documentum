@@ -89,9 +89,9 @@
             <properties name="tooltip" value=""/>
             <properties name="ariaLabel" value="Advanced Search"/>
             <properties name="navType" value="page_static"/>
-            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value="stp_advanced_search">
+            <properties xsi:type="uitemplate:DataboundProperty" name="navPageId" value="stp_searchdemo">
               <data selectionName="advanced_search" selectionLabel="Advanced Search">
-                <dataRef href="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/advanced_search.page#/"/>
+                <dataRef href="urn:stp:com.emc.xcp.artifact.page:Artifacts/Pages/searchdemo.page#/"/>
               </data>
             </properties>
             <properties name="navPageIdExpr" value=""/>
@@ -119,7 +119,7 @@
             <properties name="navPageIdExpr" value=""/>
             <properties name="navUrlExpr" value=""/>
             <properties name="navObjectId" value=""/>
-            <properties name="navToNewTab" value="true" type="BOOLEAN"/>
+            <properties name="navToNewTab" value="false" type="BOOLEAN"/>
             <properties name="navNewTabTarget" value=""/>
             <properties name="navUrlParams" value=""/>
             <properties name="xcpId" value="full_text_search"/>

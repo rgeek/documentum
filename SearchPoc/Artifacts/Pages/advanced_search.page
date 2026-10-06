@@ -93,52 +93,146 @@
             </children>
           </children>
         </children>
+        <children componentDefinitionId="xcp_button" action="//@actions[name='add_search_criteria_1']">
+          <properties name="text" value="Add Filters"/>
+          <properties name="ariaLabel" value="Add Filters"/>
+          <properties name="scale" value="small"/>
+          <properties name="badgeText" value=""/>
+          <properties name="badgeAlign" value="top-right"/>
+          <properties name="imageSource" value=""/>
+          <properties name="glyph" value=""/>
+          <properties name="iconAlign" value="left"/>
+          <properties name="tooltip" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="action">
+            <action>
+              <properties name="redirectStyle" value="none"/>
+              <properties name="showSuccessNotification" value="false" type="BOOLEAN"/>
+              <properties name="showConfirmation" value="false" type="BOOLEAN"/>
+              <properties name="navType" value="none"/>
+              <properties name="actionType" value="datasource"/>
+            </action>
+          </properties>
+          <properties name="width" value="" type="INTEGER"/>
+          <properties name="height" value="" type="INTEGER"/>
+          <properties name="cls" value=""/>
+          <properties name="preventRefocus" value="" type="BOOLEAN"/>
+          <properties name="disabled" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="xcpId" value="button"/>
+        </children>
       </children>
     </children>
-    <children componentDefinitionId="xcp_value_display">
-      <properties name="fieldLabel"/>
-      <properties name="valueType" value="HTML"/>
-      <properties name="isRepeating" value="false" type="BOOLEAN"/>
-      <properties name="name" value=""/>
-      <properties name="cls" value=""/>
-      <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
-        <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
-          <properties name="xtype" value="xcp_repeating_attribute_formatter"/>
-          <properties name="separatorStyle" value="NEWLINE"/>
-          <properties name="separator" value="COMMA"/>
-        </formatter>
-      </properties>
-      <properties name="hstretch" value="" type="BOOLEAN"/>
-      <properties name="store" value=""/>
+    <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_column_box">
+      <properties name="title"/>
+      <properties name="collapsible" value="false" type="BOOLEAN"/>
+      <properties name="collapsed" value=""/>
+      <properties name="collapseFirst" value="true" type="BOOLEAN"/>
+      <properties name="border" value="false" type="BOOLEAN"/>
+      <properties name="defaultMargins" value="5"/>
+      <properties name="margins" value=""/>
+      <properties name="layout" value="xcp_columnbox"/>
       <properties name="hidden" value=""/>
-      <properties name="tooltip" value=""/>
-      <properties name="disableImgLayout" value="false" type="BOOLEAN"/>
-      <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'&lt;div id=&quot;vd_adv_search&quot;>vd_adv_search&lt;/div>'"/>
-      <properties name="xcpId" value="value_display"/>
+      <properties name="cls" value=""/>
+      <properties name="ariaRole" value="region"/>
+      <properties name="xcpId" value="column_box1"/>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+        <properties name="orientation" value="Vertical"/>
+        <properties name="width" value=""/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="labelWidth" value="150" type="INTEGER"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="top"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnvbox1"/>
+        <children componentDefinitionId="xcp_value_display">
+          <properties name="fieldLabel"/>
+          <properties name="valueType" value="HTML"/>
+          <properties name="isRepeating" value="false" type="BOOLEAN"/>
+          <properties name="name" value=""/>
+          <properties name="cls" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
+            <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
+              <properties name="xtype" value="xcp_repeating_attribute_formatter"/>
+              <properties name="separatorStyle" value="NEWLINE"/>
+              <properties name="separator" value="COMMA"/>
+            </formatter>
+          </properties>
+          <properties name="hstretch" value="" type="BOOLEAN"/>
+          <properties name="store" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="tooltip" value=""/>
+          <properties name="disableImgLayout" value="false" type="BOOLEAN"/>
+          <properties xsi:type="uitemplate:DataboundProperty" name="value" value="'&lt;div id=&quot;vd_adv_search&quot;>vd_adv_search&lt;/div>'"/>
+          <properties name="xcpId" value="value_display"/>
+        </children>
+        <children componentDefinitionId="xcp_value_display">
+          <properties name="fieldLabel"/>
+          <properties name="valueType" value="STRING"/>
+          <properties name="isRepeating" value="false" type="BOOLEAN"/>
+          <properties name="name" value=""/>
+          <properties name="cls" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
+            <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
+              <properties name="xtype" value="xcp_repeating_attribute_formatter"/>
+              <properties name="separatorStyle" value="NEWLINE"/>
+              <properties name="separator" value="COMMA"/>
+            </formatter>
+          </properties>
+          <properties name="hstretch" value="" type="BOOLEAN"/>
+          <properties name="store" value=""/>
+          <properties name="hidden" value=""/>
+          <properties name="tooltip" value=""/>
+          <properties name="disableImgLayout" value="false" type="BOOLEAN"/>
+          <properties xsi:type="uitemplate:DataboundProperty" name="value" value=""/>
+          <properties xsi:type="uitemplate:ObjectProperty" name="format">
+            <formatter/>
+          </properties>
+          <properties name="xcpId" value="value_display1"/>
+        </children>
+      </children>
+      <children xsi:type="uitemplate:Container" componentDefinitionId="xcp_columnvbox">
+        <properties name="orientation" value="Vertical"/>
+        <properties name="width" value=""/>
+        <properties name="minWidth" value="" type="INTEGER"/>
+        <properties name="split" value="" type="BOOLEAN"/>
+        <properties name="overflow_x" value="hidden"/>
+        <properties name="labelWidth" value="150" type="INTEGER"/>
+        <properties name="labelAlign" value="left"/>
+        <properties name="halign" value="left"/>
+        <properties name="valign" value="top"/>
+        <properties name="defaultMargins" value="5"/>
+        <properties name="margins" value=""/>
+        <properties name="tooltip" value=""/>
+        <properties name="cls" value=""/>
+        <properties name="xcpId" value="columnvbox2"/>
+      </children>
     </children>
-    <children componentDefinitionId="xcp_value_display">
-      <properties name="fieldLabel" value="Label"/>
-      <properties name="valueType" value="STRING"/>
-      <properties name="isRepeating" value="false" type="BOOLEAN"/>
-      <properties name="name" value=""/>
-      <properties name="cls" value=""/>
-      <properties xsi:type="uitemplate:ObjectProperty" name="repeatingAttributeFormat">
-        <formatter componentDefinitionId="xcp_repeating_attribute_formatter">
-          <properties name="xtype" value="xcp_repeating_attribute_formatter"/>
-          <properties name="separatorStyle" value="NEWLINE"/>
-          <properties name="separator" value="COMMA"/>
-        </formatter>
-      </properties>
-      <properties name="hstretch" value="" type="BOOLEAN"/>
-      <properties name="store" value=""/>
-      <properties name="hidden" value=""/>
+    <children componentDefinitionId="xcp_button">
+      <properties name="text" value="Search"/>
+      <properties name="ariaLabel" value="Search"/>
+      <properties name="scale" value="small"/>
+      <properties name="badgeText" value=""/>
+      <properties name="badgeAlign" value="top-right"/>
+      <properties name="imageSource" value=""/>
+      <properties name="glyph" value=""/>
+      <properties name="iconAlign" value="left"/>
       <properties name="tooltip" value=""/>
-      <properties name="disableImgLayout" value="false" type="BOOLEAN"/>
-      <properties xsi:type="uitemplate:DataboundProperty" name="value" value=""/>
-      <properties xsi:type="uitemplate:ObjectProperty" name="format">
-        <formatter/>
+      <properties xsi:type="uitemplate:ObjectProperty" name="action">
+        <action/>
       </properties>
-      <properties name="xcpId" value="value_display1"/>
+      <properties name="width" value="" type="INTEGER"/>
+      <properties name="height" value="" type="INTEGER"/>
+      <properties name="cls" value=""/>
+      <properties name="preventRefocus" value="" type="BOOLEAN"/>
+      <properties name="disabled" value=""/>
+      <properties name="hidden" value=""/>
+      <properties name="xcpId" value="button1"/>
     </children>
   </rootContainer>
 </uitemplate:Page>

@@ -57,29 +57,6 @@
     <supportedFormats>excel15book</supportedFormats>
     <supportedFormats>excel</supportedFormats>
     <supportedFormats>msg</supportedFormats>
-    <assignedFormats>pdf</assignedFormats>
-    <assignedFormats>tiff</assignedFormats>
-    <assignedFormats>jpeg</assignedFormats>
-    <assignedFormats>jpeg_preview</assignedFormats>
-    <assignedFormats>gif</assignedFormats>
-    <assignedFormats>png</assignedFormats>
-    <assignedFormats>bmp</assignedFormats>
-    <assignedFormats>msw</assignedFormats>
-    <assignedFormats>msw8</assignedFormats>
-    <assignedFormats>msw12</assignedFormats>
-    <assignedFormats>msw14</assignedFormats>
-    <assignedFormats>msw15</assignedFormats>
-    <assignedFormats>ppt8</assignedFormats>
-    <assignedFormats>ppt12</assignedFormats>
-    <assignedFormats>ppt14</assignedFormats>
-    <assignedFormats>ppt15</assignedFormats>
-    <assignedFormats>powerpoint</assignedFormats>
-    <assignedFormats>excel8book</assignedFormats>
-    <assignedFormats>excel12book</assignedFormats>
-    <assignedFormats>excel14book</assignedFormats>
-    <assignedFormats>excel15book</assignedFormats>
-    <assignedFormats>excel</assignedFormats>
-    <assignedFormats>msg</assignedFormats>
   </items>
   <items name="AdvancedViewer" label="xCP Advanced Viewer">
     <supportedFormats>pdf</supportedFormats>
@@ -107,6 +84,31 @@
     <supportedFormats>msg</supportedFormats>
     <supportedFormats>rtf</supportedFormats>
     <supportedFormats>crtext</supportedFormats>
+    <assignedFormats>pdf</assignedFormats>
+    <assignedFormats>tiff</assignedFormats>
+    <assignedFormats>jpeg</assignedFormats>
+    <assignedFormats>jpeg_preview</assignedFormats>
+    <assignedFormats>gif</assignedFormats>
+    <assignedFormats>png</assignedFormats>
+    <assignedFormats>bmp</assignedFormats>
+    <assignedFormats>msw</assignedFormats>
+    <assignedFormats>msw8</assignedFormats>
+    <assignedFormats>msw12</assignedFormats>
+    <assignedFormats>msw14</assignedFormats>
+    <assignedFormats>msw15</assignedFormats>
+    <assignedFormats>ppt8</assignedFormats>
+    <assignedFormats>ppt12</assignedFormats>
+    <assignedFormats>ppt14</assignedFormats>
+    <assignedFormats>ppt15</assignedFormats>
+    <assignedFormats>powerpoint</assignedFormats>
+    <assignedFormats>excel8book</assignedFormats>
+    <assignedFormats>excel12book</assignedFormats>
+    <assignedFormats>excel14book</assignedFormats>
+    <assignedFormats>excel15book</assignedFormats>
+    <assignedFormats>excel</assignedFormats>
+    <assignedFormats>msg</assignedFormats>
+    <assignedFormats>rtf</assignedFormats>
+    <assignedFormats>crtext</assignedFormats>
   </items>
   <items name="BravaHtml" label="BravaHtml">
     <supportedFormats>igc_csf_format</supportedFormats>
@@ -200,5 +202,6 @@
     <supportedFormats>crtext</supportedFormats>
     <supportedFormats>text</supportedFormats>
     <supportedFormats>html</supportedFormats>
+    <assignedFormats>html</assignedFormats>
   </items>
 </nsviewerformat:Viewers>
