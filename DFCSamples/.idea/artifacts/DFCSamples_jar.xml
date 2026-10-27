@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DFCSamples:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DFCSamples_jar</output-path>
+    <root id="archive" name="DFCSamples.jar">
+      <element id="module-output" name="DFCSamples" />
+    </root>
+  </artifact>
+</component>
