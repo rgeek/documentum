@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.9
+Created-By: 17.0.7+7 (Eclipse Adoptium)
+Copyright: Coforge
+Version: 1.0.0
+Build-Version: 24.2.1000.0010
+Bundle-Version: 24.2.1000.0010
+Built-By: Administrator
+Built-Date: 2025-05-27 06:59:24
+Component-Bundle: tro-extensions
+

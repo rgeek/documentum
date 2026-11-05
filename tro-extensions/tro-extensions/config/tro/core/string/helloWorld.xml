@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<function xmlns="http://documentum.emc.com/2010/UI-Model"
+	id="JSFunction-helloWorld" version="1.0.0000.001">
+
+	<name>helloWorld</name>
+	<description>Returns Hello World.</description>
+	<content src="content/tro/core/string/helloWorld.js" type="text/javascript"/>
+
+	<namespace>tro.functions</namespace>
+	<categoryName>String</categoryName>
+
+	<returnType isRepeating="false">STRING</returnType>
+	<params>
+	</params>
+</function>

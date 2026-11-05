@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<function xmlns="http://documentum.emc.com/2010/UI-Model"
+          id="JSFunction-returnToPreviousPage"
+          version="1.0.0000.001">
+
+    <name>returnToPreviousPage</name>
+
+    <description>Return to previous page</description>
+
+    <content src="content/tro/core/string/returnToPreviousPage.js" type="text/javascript"/>
+
+    <returnType isRepeating="false">STRING</returnType>
+</function>

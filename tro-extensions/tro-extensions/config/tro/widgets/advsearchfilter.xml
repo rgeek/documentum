@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://documentum.emc.com/2010/UI-Model" xmlns:xcp="http://documentum.emc.com/xcp/2010"
+        id="tro_advanced_search_filter" xtype="tro_advanced_search_filter" 
+        version="1.0.0000.001">
+
+    <name>Advanced Search Filter</name>
+    <description>Advanced Full Text Search Filter</description>
+    <author email="rahul.narula@coforge.com">Rahul Narula</author>
+
+    
+	<icon src="icons/search_mo.png" width="16" height="16"/> <!-- palette -->
+    <icon src="icons/search_mo.png" width="24" height="24"/> <!-- drag-and-drop -->
+
+    <content src="content/tro/widgets/AdvancedSearchFilter.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/AdvancedSearchFilterInit.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/AdvancedSearchFilterModel.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/AdvancedSearchFilterController.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/LookupValues.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/LookupValue.js" type="text/javascript"/>
+    <content src="content/tro/widgets/advsearchfilter/AttributeConfig.js" type="text/javascript"/>
+    <content src="content/tro/widgets/design/AdvancedSearchFilter.js" type="text/javascript" mode="design"/>
+    
+    <category>xcpPalette:Custom</category>
+
+    <configuration>
+    	
+		
+		
+		<propertyInfo name="basicAuth" required="true">
+            <type>EXPRESSION</type>
+            <expression>
+                <setterFunName>setBasicAuth</setterFunName>
+                <contextTree>
+                    <include>PRIMARY_CONTEXT</include>
+                	<include>APP_CONTEXT</include>
+                	<include>WIDGET_CONTEXT</include>
+                	<include>DATASOURCE_OUTPUT</include>
+                	<include>SINGLE_OBJECT_DATA_SERVICE_OUTPUT</include>
+                </contextTree>
+            </expression>
+        </propertyInfo>
+	
+			<propertyInfo name="restEndpoint" required="true">
+            <type>EXPRESSION</type>
+            <expression>
+                <setterFunName>setRestEndpoint</setterFunName>
+                <contextTree>
+                    <include>PRIMARY_CONTEXT</include>
+                	<include>APP_CONTEXT</include>
+                	<include>WIDGET_CONTEXT</include>
+                	<include>DATASOURCE_OUTPUT</include>
+                	<include>SINGLE_OBJECT_DATA_SERVICE_OUTPUT</include>
+                </contextTree>
+            </expression>
+        </propertyInfo>
+        
+		<propertyInfo name="debug">
+			<label>Debug</label>
+			<type>BOOLEAN</type>
+			<defaultvalue>false</defaultvalue>
+		</propertyInfo>
+
+	</configuration>
+	
+	<expressionProperties>
+        <propertyInfo name="selectedFilterValue">
+            <label>Selected Filter Value</label>
+            <getterFun>
+                <name>AdvSearchFilter.view.MainContainer.getSelectedFilterValue</name>
+                <arguments>
+                    <argument>EVALUATION_CONTEXT</argument>
+                    <argument>WIDGET_ID</argument>
+                </arguments>
+            </getterFun>
+            <changeEvents>
+                <eventInfo name="search"/>
+            </changeEvents>
+        </propertyInfo>
+    </expressionProperties>
+
+   
+
+    <methods/>
+
+    <events>
+        <eventInfo name="search">search</eventInfo>
+    </events>
+
+</widget>

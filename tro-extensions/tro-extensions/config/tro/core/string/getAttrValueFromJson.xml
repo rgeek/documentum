@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<function xmlns="http://documentum.emc.com/2010/UI-Model" id="getAttr_Value_From_Json" version="1.0.0000.001">
+    <name>getAttrValueFromJson</name>
+    <description>Function to get the attribute value from JSON for filters.</description>
+    <content src="content/tro/core/string/getAttrValueFromJson.js" type="text/javascript"/>
+
+    <namespace>tro.functions</namespace>
+
+    <categoryName>String</categoryName>
+
+    <returnType isRepeating="false">STRING</returnType>
+    <params>
+    <param name="jsonSessionKey" required="true">
+    <type isRepeating="false">STRING</type>
+    </param>
+    <param name="key" required="true">
+        <type isRepeating="false">STRING</type>
+    </param>
+    </params>
+</function>
