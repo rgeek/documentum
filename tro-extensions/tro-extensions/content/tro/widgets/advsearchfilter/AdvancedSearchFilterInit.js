@@ -111,7 +111,7 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilter', {
       ]
     },
 
-    // --- Card 2: Exact phrase ---
+    // --- Card 2: Exact phrase / wildcard ---
     {
       xtype: 'panel',
       cls: 'adv-card',
@@ -130,11 +130,27 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilter', {
               margin: '0 0 0 12',
               layout: { type: 'vbox', align: 'stretch' },
               items: [
-                { xtype: 'component', cls: 'adv-card-title', html: 'Exact phrase/Wildcards(Optional)' },
-                { xtype: 'component', cls: 'adv-card-desc', html: 'Results must contain this exact phrase OR Match names using wildcard characters.' }
+                { xtype: 'component', cls: 'adv-card-title', html: 'Exact phrase / Wildcards (Optional)' },
+                { xtype: 'component', cls: 'adv-card-desc', html: 'Results must contain this exact phrase OR match names using wildcard characters.' }
               ]
             }
           ]
+        },
+        {
+          xtype: 'radiogroup',
+          reference: 'searchModeGroup',
+          cls: 'adv-search-mode-group',
+          width: 260,
+          columns: [120, 120],
+          vertical: false,
+          allowBlank: false,
+          margin: '12 0 0 0',
+          value: { searchMode: 'exact' },
+          items: [
+            { boxLabel: 'Exact Search', name: 'searchMode', inputValue: 'exact', checked: true },
+            { boxLabel: 'Wildcard', name: 'searchMode', inputValue: 'wildcard' }
+          ],
+          listeners: { change: 'onSearchModeChange' }
         },
         {
           xtype: 'textfield',
@@ -142,60 +158,17 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilter', {
           margin: '12 0 0 0',
           emptyText: 'e.g. correspondence',
           listeners: { change: 'onInputChange' }
+        },
+        {
+          xtype: 'textfield',
+          reference: 'wildcardField',
+          margin: '12 0 0 0',
+          emptyText: 'e.g. claim*',
+          hidden: true,
+          listeners: { change: 'onInputChange' }
         }
       ]
     },
-
-    // --- Card 3: Wildcards (optional) ---
-    /*{
-      xtype: 'panel',
-      cls: 'adv-card',
-      bodyPadding: 16,
-      margin: '0 0 12 0',
-      layout: { type: 'vbox', align: 'stretch' },
-      items: [
-        {
-          xtype: 'container',
-          layout: { type: 'hbox', align: 'middle' },
-          items: [
-            { xtype: 'component', cls: 'adv-card-icon adv-icon-wildcard', html: '*' },
-            {
-              xtype: 'container',
-              flex: 1,
-              margin: '0 0 0 12',
-              layout: { type: 'vbox', align: 'stretch' },
-              items: [
-                { xtype: 'component', cls: 'adv-card-title', html: 'Wildcards (optional)' },
-                { xtype: 'component', cls: 'adv-card-desc', html: 'Match names using wildcard characters.' }
-              ]
-            }
-          ]
-        },
-        {
-          xtype: 'container',
-          margin: '12 0 0 0',
-          layout: { type: 'hbox', align: 'middle' },
-          items: [
-            {
-              xtype: 'textfield',
-              reference: 'wildcardField',
-              flex: 1,
-              emptyText: 'claim*',
-              listeners: { change: 'onInputChange' }
-            },
-            {
-              xtype: 'component',
-              cls: 'adv-info-icon',
-              html: '&#9432;',
-              margin: '0 0 0 8',
-              tooltip: 'e.g. document*, d?ment'
-            }
-          ]
-        },
-        { xtype: 'component', reference: 'wildcardError', cls: 'adv-field-error', html: '', margin: '4 0 0 0', hidden: true }
-      ]
-    }*/,
-
     // --- Footer: Clear all (left) / Search (right) ---
     {
       xtype: 'container',
