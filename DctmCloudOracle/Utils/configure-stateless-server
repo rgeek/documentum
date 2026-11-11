@@ -1,0 +1,229 @@
+#!/bin/bash
+###EMC Documentum on Docker
+###(c) Copyright EMC Corp., 1992 - 2016
+###All rights reserved.
+###Version 1.0 dated 08/Sep/2016
+
+#Description - Main script to configure the stateless/seamlessupgrade content server
+
+#Description - This is Entry Point Script to configure the stateless/seamless/HA content server
+
+SUCCESS=0
+FAILURE=1
+
+if [ "$DB_TYPE" = "oracle" ]
+then
+  sed -i -e "s:<DATABASE_HOST>:$DATABASE_HOST:g" $ORACLE_HOME/network/admin/listener.ora
+  sed -i -e "s:<DATABASE_SERVER_PORT>:$DATABASE_SERVER_PORT:g" $ORACLE_HOME/network/admin/listener.ora
+  sed -i -e "s:<DATABASE_SERVER_PORT>:$DATABASE_SERVER_PORT:g" $ORACLE_HOME/network/admin/tnsnames.ora
+  sed -i -e "s:<DATABASE_HOST>:$DATABASE_HOST:g" $ORACLE_HOME/network/admin/tnsnames.ora
+  sed -i -e "s:<SERVICE_NAME>:$SERVICE_NAME:g" $ORACLE_HOME/network/admin/tnsnames.ora
+fi
+
+#invoke validation script
+
+# Creating log file at $DM_DOCKER_HOME/logs folder
+
+#Getting Hostname
+hostname=`hostname`
+
+logfile=$DM_DOCKER_HOME/logs/${hostname}.log
+
+time=`date +%m.%d.%Y.%H.%M.%S`
+if [ -f $logfile ] ; then
+  #Moving the old log file with time stamp
+  mv $logfile $logfile.save.$time
+  chown $INSTALL_OWNER:$INSTALL_OWNER  $logfile.save.$time
+fi
+
+$DM_DOCKER_HOME/scripts/validate_inputs.sh
+
+if [ $? != $SUCCESS ]
+then
+	exit $FAILURE;
+fi
+
+#Running rngd command
+echo Run rngd command >> $logfile
+rngd -b -r /dev/urandom -o /dev/random
+
+update_app_server_credential()
+{
+	source ${DM_HOME}/bin/dm_set_server_env.sh
+	java -cp $DM_DOCKER_HOME PasswordValidationUtility $APP_SERVER_PASSWORD
+	if [ $? != $SUCCESS ]
+    then
+		echo "App Server Password doesn't meet the complexity rules" >> $logfile
+        exit $FAILURE
+	else
+		echo "App server password is valid" >> $logfile
+    fi
+	echo "Updating App server Credentials..." >> $logfile
+
+	e=$(java -cp "${DOCUMENTUM}/dfc/dfc.jar" com.documentum.fc.tools.RegistryPasswordUtils $APP_SERVER_PASSWORD)
+
+	if [ "$e" != "" ]
+	then
+	   	c='admin='$e
+		sed -i '/admin/c\'${c} ${DOCUMENTUM}/${TOMCAT}/server/DctmServer_MethodServer/configuration/dctm-users.properties
+
+		if [ $? != $SUCCESS ]
+		then
+	   		echo "Failed to update password for app server. With error code:"$? >>$logfile
+		else
+			echo "App server Credential update is successful" >> $logfile
+		fi
+	else
+	  	echo "Failed to generate app server credentails.">>$logfile
+	fi
+
+}
+
+
+#update app server admin password
+update_app_server_credential
+
+echo "Documentum installation started on docker container ${hostname}" >> $logfile
+
+echo "container hostname $hostname" >> $logfile
+
+echo "DOCKER_HOST : $DOCKER_HOST" >> $logfile
+
+echo "DOCBASENAME : $DOCBASE_NAME" >> $logfile
+
+echo "AEK_NAME $AEK_NAME" >> $logfile
+
+#Getting OSTYPE.
+ubuntuos=`grep DISTRIB_ID /etc/*-release | awk -F '=' '{print $2}'`
+if [ "$ubuntuos" = "Ubuntu" ]
+then
+        #This portion will execute for Ubuntu OS
+        #Searching for the INSTALL_OWNER user
+		if [ `id -u $INSTALL_OWNER 2>/dev/null || echo -1` -ge 0 ]
+		then
+				echo "$INSTALL_OWNER FOUND" >> $logfile
+				#User UID is defferent from existing user  for HA and seamless
+				if [ $INSTALL_OWNER_UID ]
+				then
+						#Chaning INSTALL_OWNER_UID value
+						echo " Changing INSTALL_OWNER_UID " >> $logfile
+						usermod -u ${INSTALL_OWNER_UID} ${INSTALL_OWNER}
+						$DM_DOCKER_HOME/scripts/installowner_change.sh
+				fi
+		else
+				echo "Creating $INSTALL_OWNER " >> $logfile
+				#Default user is dmadmin. Here creating new user rather than default user
+				useradd ${INSTALL_OWNER} --password $INSTALL_OWNER_PASSWORD
+				echo " Creating /home/${INSTALL_OWNER} folder " >> $logfile
+				mkdir /home/${INSTALL_OWNER}
+				echo " changing owner /home/${INSTALL_OWNER} folder " >> $logfile
+				chown ${INSTALL_OWNER}:${INSTALL_OWNER} /home/${INSTALL_OWNER}
+				#User UID is defferent from newly created user id for HA and seamless
+				if [ $INSTALL_OWNER_UID ]
+				then
+						#Chaning INSTALL_OWNER_UID value
+						echo " Changing INSTALL_OWNER_UID " >> $logfile
+						usermod -u ${INSTALL_OWNER_UID} ${INSTALL_OWNER}
+				fi
+				#Changing the Install owner from dmadmin to new user
+				$DM_DOCKER_HOME/scripts/installowner_change.sh
+
+		fi
+		#Setting root and install owner and postgres user password from defaults to new passwords
+		echo "$INSTALL_OWNER:$INSTALL_OWNER_PASSWORD" | sudo chpasswd >> $logfile
+		echo "root:$ROOT_PASSWORD" | sudo chpasswd >> $logfile
+		echo "postgres:$DATABASE_PASSWORD" | sudo chpasswd >> $logfile
+else
+		#This portion will execute for RHEL/Cent OS
+        #Searching for the INSTALL_OWNER user
+		if [ `id -u $INSTALL_OWNER 2>/dev/null || echo -1` -ge 0 ]
+		then
+				echo "$INSTALL_OWNER FOUND" >> $logfile
+				#User UID is defferent from existing user  for HA and seamless
+				if [ $INSTALL_OWNER_UID ]
+				then
+						#Chaning INSTALL_OWNER_UID value
+						echo " Changing INSTALL_OWNER_UID " >> $logfile
+						usermod -u ${INSTALL_OWNER_UID} ${INSTALL_OWNER}
+						$DM_DOCKER_HOME/scripts/installowner_change.sh
+				fi
+
+		else
+		        echo "Creating $INSTALL_OWNER " >> $logfile
+				#Default user is dmadmin. Here creating new user rather than default user
+				adduser ${INSTALL_OWNER}
+				echo " changing owner /home/${INSTALL_OWNER} folder " >> $logfile
+				chown ${INSTALL_OWNER}:${INSTALL_OWNER} /home/${INSTALL_OWNER}
+				#User UID is defferent from newly created user id for HA and seamless
+				if [ $INSTALL_OWNER_UID ]
+				then
+						#Chaning INSTALL_OWNER_UID value
+						echo " Changing INSTALL_OWNER_UID " >> $logfile
+						usermod -u ${INSTALL_OWNER_UID} ${INSTALL_OWNER}
+				fi
+				#Changing the Install owner from dmadmin to new user
+				$DM_DOCKER_HOME/scripts/installowner_change.sh
+		fi
+		#Setting root and install owner and postgres/oracle user password from defaults to new passwords
+		echo "$INSTALL_OWNER_PASSWORD" | passwd --stdin $INSTALL_OWNER >> $logfile
+		echo "$ROOT_PASSWORD" | passwd --stdin root  >> $logfile
+		if [ "$DB_TYPE" = "oracle" ]
+		then
+				echo "$DATABASE_PASSWORD" | passwd --stdin oracle >> $logfile
+		else
+				echo "$DATABASE_PASSWORD" | passwd --stdin postgres >> $logfile
+		fi
+fi
+
+if [[ ! -z "$JMS_MEM_SETTING" ]]
+then
+    sed -i -e "s/CATALINA_OPTS=.*/CATALINA_OPTS=$JMS_MEM_SETTING/" ${DOCUMENTUM}/$TOMCAT/bin/startMethodServer.sh
+    if [ $? != $SUCCESS ]
+    then
+        echo "ERROR : Replacing CATALINA_OPTS. Please check ${DOCUMENTUM}/$TOMCAT/log/catalina.out"
+    fi
+fi
+
+#Chaining logfile owner
+chown $INSTALL_OWNER:$INSTALL_OWNER  $logfile
+hostname=`hostname`
+oldhostname=`cat ${DOCUMENTUM}/uninstall/dfc/installvariables.properties | grep NATIVE_ENVIRONMENT.HOSTNAME | awk '{print substr($1,index($1,"=")+1)}'`
+	if [ "$oldhostname" = "$hostname" ]
+	then
+		echo Hostname is already modified >> $logfile
+	else
+		echo Old hostname is : $oldhostname >> $logfile
+		echo "oldhostname = $hostname" > ${DOCUMENTUM}/odbc/hostname
+		sed -i -e "s/OldHostname/$oldhostname/"  ${DM_DOCKER_HOME}/config/config.xml
+		sed -i -e "s/NewHostname/$hostname/"  /${DM_DOCKER_HOME}/config/config.xml
+		su $INSTALL_OWNER -c "cd; \cp  ${DM_HOME}/install/external_apps/MigrationUtil/config.xml ${DM_HOME}/install/external_apps/MigrationUtil/config.xml.bak"
+		su $INSTALL_OWNER -c "cd; \cp  ${DM_DOCKER_HOME}/config/config.xml ${DM_HOME}/install/external_apps/MigrationUtil/config.xml"
+		chmod 775 ${DM_HOME}/install/external_apps/MigrationUtil/config.xml
+		su $INSTALL_OWNER -c "cd ${DM_HOME}/install/external_apps/MigrationUtil; source $DM_HOME/bin/dm_set_server_env.sh; java -cp '${CLASSPATH}:${DM_HOME}/install/external_apps/MigrationUtil/MigrationUtil.jar' MigrationUtil"
+		if [ $? != $SUCCESS ]
+		then
+			echo "ERROR: The Hostname change Utility has failed. Please check install logs at container's ${DM_HOME}/install/external_apps/MigrationUtil/logs" >> $logfile
+			echo "Revert ${DM_HOME}/install/external_apps/MigrationUtil/config.xml" >> $logfile
+			su $INSTALL_OWNER -c "cd; \cp  ${DM_HOME}/install/external_apps/MigrationUtil/config.xml.bak ${DM_HOME}/install/external_apps/MigrationUtil/config.xml"
+			exit $FAILURE
+		fi
+		echo "Revert ${DM_HOME}/install/external_apps/MigrationUtil/config.xml" >> $logfile
+		su $INSTALL_OWNER -c "cd; \cp  ${DM_HOME}/install/external_apps/MigrationUtil/config.xml.bak ${DM_HOME}/install/external_apps/MigrationUtil/config.xml"
+
+	fi
+
+##Creating docbrokers and docbase and configure Thumnail server
+$DM_DOCKER_HOME/scripts/install_docbroker_docbase_ts.sh
+
+touch ${DOCUMENTUM}/dba/${DOCBASE_NAME}-installed
+
+echo "Finised dctm configuration on docker" >> $logfile
+
+rm -rf /tmp/*
+ps -ef
+if [ "$FROM_CS_STARTUP" != true ]
+then
+  tail -f /dev/null & wait
+fi
+
+

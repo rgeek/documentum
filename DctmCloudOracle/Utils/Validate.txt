@@ -1,0 +1,133 @@
+Nice work. Here's a checklist to prove the second server is a real one, followed by the few steps that remain.
+
+## 1. Validate
+
+Run these from Git Bash. Set the variable once, and replace `<pwd>` with your install owner password.
+
+```bash
+export MSYS_NO_PATHCONV=1
+ENV='source $DM_HOME/bin/dm_set_server_env.sh;'
+```
+
+**a) Two servers registered on the docbase**
+
+```bash
+docker exec dctm-cs-ora bash -c "$ENV idql ecmdev_ora -Udmadmin -P <<'EOF'
+select object_name, r_host_name, r_server_version from dm_server_config
+go
+select object_name from dm_jms_config
+go
+select object_name from dm_acs_config
+go
+quit
+EOF"
+```
+
+You should get two of each: `ecmdev_ora` and `dctm-cs-ora2_ecmdev_ora` (or similar), each with its own method server (JMS) and ACS config.
+
+**b) The docbrokers know about both servers**
+
+```bash
+docker exec dctm-cs-ora  bash -c "$ENV dmqdocbroker -t dctm-cs-ora  -p 1489 -c getservermap ecmdev_ora"
+docker exec dctm-cs-ora2 bash -c "$ENV dmqdocbroker -t dctm-cs-ora2 -p 1489 -c getservermap ecmdev_ora"
+```
+
+The primary's docbroker should list both servers, because `cs2` was configured to register with it. The `cs2` docbroker probably lists only `cs2`. Step 2a fixes that.
+
+**c) Connect through each server explicitly** (`docbase.server` syntax)
+
+```bash
+docker exec dctm-cs-ora2 bash -c "$ENV idql ecmdev_ora.dctm-cs-ora2_ecmdev_ora -Udmadmin -P <<< \$'select r_host_name from dm_server_config where object_name = (select object_name from dm_server_config where r_host_name like \\'%ora2%\\')\ngo\nquit'"
+```
+
+Simpler: run `idql ecmdev_ora.dctm-cs-ora2_ecmdev_ora -Udmadmin -P<pwd>` interactively and check you get a prompt. That proves the session went through `cs2`.
+
+**d) Content is shared:** write a file through `cs`, read it back through `cs2`
+
+```bash
+# create + upload on cs1
+docker exec dctm-cs-ora bash -c "$ENV echo 'hello from cs1' > /tmp/t.txt; iapi ecmdev_ora.ecmdev_ora -Udmadmin -P <<'EOF'
+create,c,dm_document
+set,c,l,object_name
+ha_test_doc
+setfile,c,l,/tmp/t.txt,text
+save,c,l
+quit
+EOF"
+
+# read it on cs2
+docker exec dctm-cs-ora2 bash -c "$ENV iapi ecmdev_ora.dctm-cs-ora2_ecmdev_ora -Udmadmin -P <<'EOF'
+retrieve,c,dm_document where object_name='ha_test_doc'
+getfile,c,l,/tmp/from_cs2.txt
+quit
+EOF
+cat /tmp/from_cs2.txt"
+```
+
+If `hello from cs1` comes back, both servers are reading the same filestore on the shared `data` volume.
+
+**e) Each method server (JMS) responds**
+
+```bash
+curl -s -o /dev/null -w "cs1 JMS %{http_code}\n" http://localhost:9180/DmMethods/servlet/DoMethod
+curl -s -o /dev/null -w "cs2 JMS %{http_code}\n" http://localhost:9280/DmMethods/servlet/DoMethod
+```
+
+Expect 200, or at least a response rather than a connection error.
+
+**f) Failover:** stop the primary's docbase and keep working through `cs2`
+
+```bash
+docker exec dctm-cs-ora /opt/dctm/dba/dm_shutdown_ecmdev_ora
+docker exec dctm-cs-ora2 bash -c "$ENV idql ecmdev_ora -Udmadmin -P <<< \$'select count(*) from dm_document\ngo\nquit'"
+docker exec dctm-cs-ora /opt/dctm/dba/dm_start_ecmdev_ora
+```
+
+The query should still work while the primary is down. If it fails with "no servers available", do step 2a and 2b, then repeat.
+
+## 2. Remaining steps
+
+**a) Make each server register with both docbrokers.** Add the `cs2` docbroker as an extra registration target in the primary's `server.ini`. Check the existing `[DOCBROKER_PROJECTION_TARGET…]` numbers first, then use the next free one:
+
+```bash
+docker exec dctm-cs-ora grep -n PROJECTION_TARGET /opt/dctm/dba/config/ecmdev_ora/server.ini
+docker exec dctm-cs-ora bash -c 'printf "\n[DOCBROKER_PROJECTION_TARGET_3]\nhost = dctm-cs-ora2\nport = 1489\nproximity = 2\n" >> /opt/dctm/dba/config/ecmdev_ora/server.ini'
+```
+
+`cs2` already registers with the primary's docbroker. Restart the primary docbase (`dm_shutdown`, then `dm_start`) for the change to take effect.
+
+**b) Give each server's DFC both docbrokers** (step 7 of OpenText's Readme):
+
+```bash
+docker exec dctm-cs-ora  grep -n docbroker /opt/dctm/config/dfc.properties
+docker exec dctm-cs-ora2 grep -n docbroker /opt/dctm/config/dfc.properties
+# then add the other one as the next index, e.g.:
+docker exec dctm-cs-ora  bash -c 'printf "dfc.docbroker.host[1]=dctm-cs-ora2\ndfc.docbroker.port[1]=1489\n" >> /opt/dctm/config/dfc.properties'
+docker exec dctm-cs-ora2 bash -c 'printf "dfc.docbroker.host[1]=dctm-cs-ora\ndfc.docbroker.port[1]=1489\n" >> /opt/dctm/config/dfc.properties'
+```
+
+For clients on Windows (DA, DQMan, your own DFC code), list both: `localhost:2689` for `cs` and `localhost:3689` for `cs2`.
+
+**c) Make `cs2` survive restarts.** Same as you did for `cs`:
+
+```bash
+docker exec dctm-cs-ora2 ls /opt/dctm/odbc /opt/dctm/mdserver_conf
+docker exec dctm-cs-ora2 bash -c 'cp $TNS_ADMIN/tnsnames.ora /opt/dctm/odbc/'
+docker exec -u root dctm-cs-ora2 /opt/dctm_docker/scripts/methodserver_restore_backup_changes.sh backup
+docker restart dctm-cs-ora2
+docker exec dctm-cs-ora2 bash -c 'pgrep -fa "documentum -docbase_name"'
+```
+
+**d) Shut down in order before `docker compose stop`:** `cs2`, then `cs`, then Oracle.
+
+```bash
+docker exec dctm-cs-ora2 /opt/dctm/dba/dm_shutdown_ecmdev_ora_dm_ecmdev_ora
+docker exec dctm-cs-ora  /opt/dctm/dba/dm_shutdown_ecmdev_ora
+docker compose -f docker-compose.oracle.yml --env-file .env.oracle stop
+```
+
+Check the exact `dm_shutdown_*` name with `ls /opt/dctm/dba/dm_shutdown_*` in each container.
+
+**e) Worth doing now:** put the whole folder in a git repo: the compose file, `.env.oracle.example` (no real passwords), the Dockerfile, `add_oracle_env.sh` and `cs2_init.sh`. Add a README listing the image bugs you worked around: `<PROTOCOL>`, `TNS_ADMIN`, the Oracle binary swap, the `@` in passwords, the hard-coded DMS values, and `localhost` vs hostname. That makes a strong portfolio piece for the ECM cloud migration angle.
+
+If check (f) fails, send me the output of check (b). The cause will almost certainly be docbroker registration (step 2a).

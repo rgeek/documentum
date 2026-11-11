@@ -1,0 +1,255 @@
+# Documentum Content Server 23.2 - Oracle flavour, single host
+# 24.4: ONE image (ot-dctm-server) for both Postgres and Oracle; DB_TYPE=oracle switches it
+# (mirrors the 24.4 Helm chart's `oracle.isoracledb: true`).
+# Usage:  cp .env.oracle.example .env.oracle   (edit)
+#         docker compose -f docker-compose.oracle.yml --env-file .env.oracle up -d
+
+name: dctm-oracle   # separate compose project, so it never touches the Postgres stack
+
+services:
+  oradb:
+    # Lab DB only. Oracle XE 21c (free). For anything beyond a lab use a certified
+    # version (check the CS 23.2 release notes; 19c is the usual safe choice).
+    image: gvenzl/oracle-xe:21-slim
+    container_name: dctm-oradb
+    hostname: dctm-oradb
+    environment:
+      ORACLE_PASSWORD: ${DATABASE_PASSWORD}      # password for SYS/SYSTEM
+    ports:
+      - "1521:1521"                              # optional: SQL Developer from Windows
+    volumes:
+      - oradata:/opt/oracle/oradata
+    shm_size: 1g
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 15s
+      timeout: 10s
+      retries: 40                                # first start creates the DB: ~5-10 min
+    restart: unless-stopped
+
+  cs:
+    # Patched build of the OpenText image (fixes <PROTOCOL> left in tnsnames.ora)
+    build:
+      context: .
+      dockerfile: Dockerfile.cs-ora
+      args:
+        BASE_IMAGE: ${CS_IMAGE}
+        RUN_AS_USER: ${CS_RUN_AS_USER:-dmadmin}
+    image: dctm-server-ora-patched:24.4
+    container_name: dctm-cs-ora
+    # Healthy only when the docbase is installed (marker written by configure-stateless-server)
+    # AND accepting connections. cs2 waits for this.
+    healthcheck:
+      test: ["CMD", "bash", "-c", "test -f /opt/dctm/dba/$${DOCBASE_NAME}-installed && (echo > /dev/tcp/$$(hostname)/50000) 2>/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60m                          # first install can take 30-40 min
+    hostname: dctm-cs-ora                        # keep FIXED after first install
+    depends_on:
+      oradb:
+        condition: service_healthy
+    privileged: true
+    environment:
+      # --- Oracle switch (24.4 chart: oracle.isoracledb=true sets only this) ---
+      - DB_TYPE=oracle
+      - TNS_ADMIN=/opt/dctm_tns_admin           # also set in Dockerfile.cs-ora; Docker-mode scripts need it
+      - PEER_HOST=dctm-cs-ora2                    # entry script: peer docbroker for dfc/server.ini
+      - ENABLE_PE=${ENABLE_PE:-false}             # entry script: run Process Engine scripts
+      # Mirrors the Helm chart (harmless; not what fixes the tnsnames issue)
+      - DATABASE_SSL_SUPPORT=false
+      - DATABASE_PAAS_ENV=false
+      - DATABASE_NAME=
+      # --- Database connection ---
+      - DOCKER_HOST=${HOST_IP}
+      - DATABASE_HOST=oradb
+      - DATABASE_SERVER_PORT=1521
+      - DATABASE_USER=system                     # needs DBA rights to create the docbase owner
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      # Service name: use the PLUGGABLE db (XEPDB1), not the CDB (XE),
+      # otherwise user creation fails with ORA-65096
+      - SERVICE_NAME=${ORACLE_SERVICE}
+      - DATABASE_SERVICE_NAME=${ORACLE_SERVICE}
+      - INDEXSPACE_NAME=DM_${DOCBASE_NAME_UPPER}_INDEX
+      # --- Docbase / install (same as the Postgres version) ---
+      - ROOT_PASSWORD=${ROOT_PASSWORD}
+      - INSTALL_OWNER=dmadmin
+      - INSTALL_OWNER_PASSWORD=${INSTALL_OWNER_PASSWORD}
+      - INSTALL_OWNER_UID=1000
+      - DOCBASE_NAME=${DOCBASE_NAME}
+      - DOCBASE_ID=${DOCBASE_ID}
+      - DOCBASE_PASSWORD=${DOCBASE_PASSWORD}
+      - GLOBAL_REGISTRY_PASSWORD=${GLOBAL_REGISTRY_PASSWORD}
+      - AEK_ALGORITHM=AES_256_CBC
+      - AEK_PASSPHRASE=${AEK_PASSPHRASE}
+      - AEK_NAME=CSaek
+      - USE_EXISTING_AEK=false
+      - USE_EXISTING_DATABASE_ACCOUNT=
+      - APP_SERVER_PASSWORD=${APP_SERVER_PASSWORD}
+      - EXTERNAL_DOCBROKER_PORT=1689
+      - CONTENTSERVER_PORT=50000
+      - CONFIGURE_THUMBNAIL_SERVER=NO
+      - INSTALLER_UI=silent
+      - KEEP_TEMP_FILE=false
+      - INSTALLER_DEBUG_LOG=true
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+      - CONFIGURE_EMAIL=false
+      - SMTP_PASS=dummy
+      - DM_CRYPTO_MIN_PASSWORD_LENGTH=16
+    ports:
+      # Different host ports so it can run ALONGSIDE the Postgres stack
+      - "2489:1489"
+      - "2689:1689"
+      - "41000:50000"
+      - "41001:50001"
+      - "9180:9080"
+    volumes:
+      - csora_odbc:/opt/dctm/odbc
+      - csora_data:/opt/dctm/data
+      - csora_dba:/opt/dctm/dba
+      - csora_share:/opt/dctm/share
+      - csora_dfc:/opt/dctm/config
+      - csora_mdserver_conf:/opt/dctm/mdserver_conf
+      - csora_kube:/opt/dctm/kube                 # PE backup + version marker (10pedeploy.sh)
+    restart: unless-stopped
+
+  # Second Content Server on the same docbase (Docker-mode HA / CFS server).
+  # Triggered by SERVER_CONFIG_NAME (= the PRIMARY server config name). New server config
+  # will be <hostname>_<docbase> = dctm-cs-ora2_ecmdev_ora.
+  cs2:
+    image: dctm-server-ora-patched:24.4          # same patched image as cs (build cs first)
+    container_name: dctm-cs-ora2
+    hostname: dctm-cs-ora2                        # keep FIXED; it is part of the server config name
+    depends_on:
+      cs:
+        condition: service_healthy               # wait for the primary docbase to be up
+    privileged: true
+    environment:
+      - DB_TYPE=oracle
+      - TNS_ADMIN=/opt/dctm_tns_admin
+      - DOCKER_HOST=${HOST_IP}
+      - DATABASE_HOST=oradb
+      - DATABASE_SERVER_PORT=1521
+      - DATABASE_USER=system
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - SERVICE_NAME=${ORACLE_SERVICE}
+      - DATABASE_SERVICE_NAME=${ORACLE_SERVICE}
+      - ROOT_PASSWORD=${ROOT_PASSWORD}
+      - INSTALL_OWNER=dmadmin
+      - INSTALL_OWNER_PASSWORD=${INSTALL_OWNER_PASSWORD}
+      - INSTALL_OWNER_UID=1000
+      - DOCBASE_NAME=${DOCBASE_NAME}
+      - DOCBASE_ID=${DOCBASE_ID}
+      - DOCBASE_PASSWORD=${DOCBASE_PASSWORD}
+      - GLOBAL_REGISTRY_PASSWORD=${GLOBAL_REGISTRY_PASSWORD}
+      - AEK_ALGORITHM=AES_256_CBC
+      - AEK_PASSPHRASE=${AEK_PASSPHRASE}          # must match the primary
+      - AEK_NAME=CSaek                            # must match the primary
+      - APP_SERVER_PASSWORD=${APP_SERVER_PASSWORD}
+      - EXTERNAL_DOCBROKER_PORT=1689
+      - CONTENTSERVER_PORT=50000
+      - CONFIGURE_THUMBNAIL_SERVER=NO
+      - INSTALLER_UI=silent
+      - INSTALLER_DEBUG_LOG=true
+      - LOG4J_FORMAT_MSG_NO_LOOKUPS=true
+      - DM_CRYPTO_MIN_PASSWORD_LENGTH=16
+      # --- HA / additional server (create_ha_server.sh) ---
+      - SERVER_CONFIG_NAME=${DOCBASE_NAME}        # PRIMARY's server config name
+      - DOCBROKER_HOST=dctm-cs-ora                # primary's docbroker (also used as repository host)
+      - DOCBROKER_PORT=1489
+      - DOCUMENTUM_PATH=/opt/dctm                 # same as this container's DOCUMENTUM
+      - PRIMARY_MAJAR_VERSION=24.4
+      - DOCUMENTUM_DATA_PATH=/opt/dctm/data
+      - DOCUMENTUM_SHARE_PATH=/opt/dctm/share
+      - GLOBAL_REGISTRY_REPOSITORY=${DOCBASE_NAME}
+      - GLOBAL_REGISTRY_DOCBROKER_HOST=dctm-cs-ora
+      - GLOBAL_REGISTRY_DOCBROKER_PORT=1489
+      - VALIDATE_FQDN=false
+      - PRIMARY_DBA_DIR=/primary_dba              # entry script copies primary AEK from here
+      - PEER_HOST=dctm-cs-ora                     # entry script: peer docbroker for dfc/server.ini
+      - ENABLE_PE=${ENABLE_PE:-false}             # entry script: run Process Engine scripts
+    ports:
+      - "3489:1489"
+      - "3689:1689"
+      - "42000:50000"
+      - "42001:50001"
+      - "9280:9080"
+    volumes:
+      - csora_data:/opt/dctm/data                 # SHARED with cs (content filestore)
+      - csora_share:/opt/dctm/share               # SHARED with cs
+      - csora2_odbc:/opt/dctm/odbc                # own
+      - csora2_dba:/opt/dctm/dba                  # own (server.ini, AEK, logs)
+      - csora2_dfc:/opt/dctm/config               # own (dfc.properties)
+      - csora2_mdserver_conf:/opt/dctm/mdserver_conf
+      - csora2_kube:/opt/dctm/kube                # PE backup + version marker (10pedeploy.sh)
+      - csora_dba:/primary_dba:ro                 # primary's dba (read-only) -> AEK source
+    restart: unless-stopped
+
+  # ---------------- Documentum Administrator (mirrors the 24.4 Helm "da" chart) ----------------
+  # Init step: copies the DA webapp onto the shared da_ext volume (chart init container "dawebapp").
+  da-init:
+    image: registry.opentext.com/ot-dctm-admin:24.4
+    container_name: dctm-da-init
+    user: root                                    # new Docker volume is root-owned; k8s NFS PVC isn't
+    command: ["/bin/bash", "-c", "./initstartup.sh"]
+    volumes:
+      - da_ext:/opt/d2extension
+    restart: "no"
+
+  da:
+    image: registry.opentext.com/ot-dctm-admin-tomcat:24.4
+    container_name: dctm-da
+    hostname: dctm-da
+    depends_on:
+      da-init:
+        condition: service_completed_successfully
+      cs:
+        condition: service_healthy
+    # same start command as the chart's da container
+    command: ["/bin/bash", "-c", "sudo chown -Rf $$INSTALL_OWNER:$$INSTALL_OWNER /opt;sudo chmod -Rf 755 /opt;mkdir -p $$HOME;cp -Rf /opt/d2extension/dawebapp/* $$HOME/;rm -r /opt/newrelic/*;cp /opt/d2extension/dawebapp/newrelic/* /opt/newrelic;./opt/d2extension/dawebapp/extensionstartup.sh"]
+    environment:
+      - DA_EXT_CONF=/opt/tomcat/webapps/da/external-configurations
+      - KUBERNETES=true                           # as in the chart (DA's own startup, not the CS scripts)
+      - DOCBASE_NAME=${DOCBASE_NAME}
+      - INSTALL_OWNER=dmadmin
+      - INSTALL_OWNER_PASSWORD=${INSTALL_OWNER_PASSWORD}
+      - DFC_GLOBALREGISTRY_PASSWORD=${GLOBAL_REGISTRY_PASSWORD}
+      - DFC_SSL_TRUSTSTORE_PASSWORD=
+      - PREFERPASS=${DA_PREFERENCE_PASSWORD}
+      - PRESETPASS=${DA_PRESET_PASSWORD}
+      - ALLOW_TRUSTED_LOGIN=false
+      - USE_CERTIFICATE=false
+      - DMS_SERVICE_NAME=
+      - DMS_HTTP_PORT=
+    ports:
+      - "8088:8080"                               # http://localhost:8088/da
+    volumes:
+      - da_ext:/opt/d2extension
+      - da_conf:/opt/tomcat/webapps/da/external-configurations
+      - ./da/dfc.properties:/opt/tomcat/webapps/da/external-configurations/dfc.properties
+      - ./da/app.properties:/opt/tomcat/webapps/da/external-configurations/app.properties
+      - ./da/log4j2.properties:/opt/tomcat/webapps/da/external-configurations/log4j2.properties
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "-o", "/dev/null", "http://localhost:8080/da/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 10
+      start_period: 5m
+    restart: unless-stopped
+
+volumes:
+  oradata:
+  csora_odbc:
+  csora_data:
+  csora_dba:
+  csora_share:
+  csora_dfc:
+  csora_mdserver_conf:
+  csora2_odbc:
+  csora2_dba:
+  csora2_dfc:
+  csora2_mdserver_conf:
+  csora_kube:
+  csora2_kube:
+  da_ext:
+  da_conf:

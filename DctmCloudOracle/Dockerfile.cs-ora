@@ -1,0 +1,135 @@
+# Patch for ot-dctm-server:24.4 in plain-Docker (non-Kubernetes) mode with Oracle.
+#
+# Two scripts each manage their own tnsnames.ora, and the image ships neither correctly:
+#  1) configure-stateless-server edits $ORACLE_HOME/network/admin/tnsnames.ora
+#     (ORACLE_HOME=/usr/lib/oracle/21/client64/lib) replacing <DATABASE_HOST>,
+#     <DATABASE_SERVER_PORT>, <SERVICE_NAME> -- but the file does not exist, and it never
+#     replaces <PROTOCOL>.
+#  2) scripts/create_docbase.sh edits $TNS_ADMIN/tnsnames.ora (TNS_ADMIN unset in the image)
+#     replacing legacy literals 10.31.71.131 / 1521 / orcl. We ship the FINAL file instead
+#     (those seds become no-ops), so recreated containers work without the restore step.
+# We create both templates so both scripts produce a valid file for the same alias.
+#
+#  3) The image ships BOTH Postgres and Oracle server binaries. kube_cs.sh -> handle_oracle_install()
+#     swaps in the *_oracle ones when DB_TYPE=oracle; the Docker-mode path never does, so the
+#     installer runs with Postgres binaries and looks for an ODBC DSN ("cannot find the ODBC named").
+#     We do the same swap at build time.
+ARG BASE_IMAGE=registry.opentext.com/ot-dctm-server:24.4
+# --- Process Engine: same image the 24.4 Helm chart uses as the "peinstaller-init" init container.
+#     (Needs a Process Engine entitlement. Without it, delete this line and step 8.)
+ARG PE_IMAGE=registry.opentext.com/ot-dctm-bpm-installer:24.4
+FROM ${PE_IMAGE} AS pe
+FROM ${BASE_IMAGE}
+USER root
+
+ENV TNS_ADMIN=/opt/dctm_tns_admin
+# DB connection used to pre-fill $TNS_ADMIN/tnsnames.ora, so a recreated container
+# (docker compose down/up) never depends on the scripts' restore step.
+ARG TNS_DB_HOST=oradb
+ARG TNS_DB_PORT=1521
+ARG TNS_SERVICE=XEPDB1
+
+RUN set -e; \
+    OH_NET=/usr/lib/oracle/21/client64/lib/network/admin; \
+    mkdir -p "$OH_NET" "$TNS_ADMIN"; \
+    printf '%s\n' \
+      '<SERVICE_NAME> =' \
+      '  (DESCRIPTION =' \
+      '    (ADDRESS = (PROTOCOL = TCP)(HOST = <DATABASE_HOST>)(PORT = <DATABASE_SERVER_PORT>))' \
+      '    (CONNECT_DATA =' \
+      '      (SERVER = DEDICATED)' \
+      '      (SERVICE_NAME = <SERVICE_NAME>)' \
+      '    )' \
+      '  )' > "$OH_NET/tnsnames.ora"; \
+    printf '%s\n' \
+      "${TNS_SERVICE} =" \
+      '  (DESCRIPTION =' \
+      "    (ADDRESS = (PROTOCOL = TCP)(HOST = ${TNS_DB_HOST})(PORT = ${TNS_DB_PORT}))" \
+      '    (CONNECT_DATA =' \
+      '      (SERVER = DEDICATED)' \
+      "      (SERVICE_NAME = ${TNS_SERVICE})" \
+      '    )' \
+      '  )' > "$TNS_ADMIN/tnsnames.ora"; \
+    D19=/opt/app/oracle/product/19.0.0/db_1/network/admin; \
+    for f in tnsnames.ora listener.ora; do [ -f "$D19/$f" ] && sed -i 's/<PROTOCOL>/TCP/g' "$D19/$f" || true; done; \
+    chmod -R a+rwX "$OH_NET" "$TNS_ADMIN"; \
+    [ -d "$D19" ] && chmod -R a+rwX "$D19" || true; \
+    echo "== $OH_NET/tnsnames.ora"; cat "$OH_NET/tnsnames.ora"; \
+    echo "== $TNS_ADMIN/tnsnames.ora"; cat "$TNS_ADMIN/tnsnames.ora"
+
+# --- 3) Swap in the Oracle server binaries (mirror of kube_cs.sh handle_oracle_install) ---
+RUN set -e; \
+    DMH="${DM_HOME:-$(ls -d /opt/dctm/product/*/ 2>/dev/null | head -1)}"; DMH="${DMH%/}"; \
+    echo "DM_HOME resolved to: $DMH"; \
+    cd "$DMH/bin"; \
+    for f in documentum dm_set_server_env.sh dmdbtest dmclean dmfilescan dm_crypto_upgrade; do \
+      if [ -f "${f}_oracle" ]; then \
+        [ -f "$f" ] && mv "$f" "${f}_postgres"; \
+        mv "${f}_oracle" "$f"; chmod 755 "$f"; echo "swapped: $f"; \
+      else \
+        echo "WARNING: ${f}_oracle not found in $DMH/bin"; \
+      fi; \
+    done; \
+    ls -l "$DMH/bin" | grep -E 'documentum|dm_set_server_env|dmdbtest' 
+
+# --- 3b) ORACLE_HOME / TNS_ADMIN in dm_set_server_env.sh (Oracle copy, after the swap) ---
+COPY --chmod=755 add_oracle_env.sh /opt/dctm_docker/add_oracle_env.sh
+RUN /opt/dctm_docker/add_oracle_env.sh
+
+# --- 4a) Make ORACLE_HOME / TNS_ADMIN available in login shells (su - dmadmin wipes the env) ---
+RUN for f in /home/dmadmin/.bash_profile /home/dmadmin/.bashrc; do \
+      [ -f "$f" ] || continue; \
+      grep -q 'TNS_ADMIN=' "$f" || printf '\nexport ORACLE_HOME=/usr/lib/oracle/21/client64/lib\nexport TNS_ADMIN=/opt/dctm_tns_admin\n' >> "$f"; \
+    done
+
+# --- 5) Entry point for cs and cs2: AEK copy (cs2), OpenText startup unchanged, then idempotent
+#        post-config (peer docbroker in dfc.properties + server.ini, JMS config if missing, backups)
+COPY --chmod=755 dctm_entry.sh /opt/dctm_docker/dctm_entry.sh
+
+# --- 6) DMS defaults in the image point at an OpenText lab (10.32.70.x / TestCfsSilence).
+#        The DMS step fails, and the primary installer then SKIPS the JMS config setup
+#        (dm_jms_admin.sh). Point DMS at this environment instead. DMS has no "off" switch
+#        (DMS_ACTION = CREATE|UPGRADE|DELETE). If DMS still fails on XE, create the JMS
+#        config afterwards with dm_jms_admin.sh (see README).
+ARG DMS_DOCBASE=ecmdev_ora
+ARG DMS_CS_HOST=dctm-cs-ora
+ARG DMS_DB_HOST=oradb
+ARG DMS_DB_ID=XEPDB1
+RUN f=/opt/dctm_docker/config/linux_config.properties; \
+    sed -i -e "s/^DMS.HOST_NAME=.*/DMS.HOST_NAME=${DMS_CS_HOST}/" \
+           -e "s/^DFC.DOCBROKER_HOST=.*/DFC.DOCBROKER_HOST=${DMS_CS_HOST}/" \
+           -e "s/^DFC.GLOBAL_REGISTRIES=.*/DFC.GLOBAL_REGISTRIES=${DMS_DOCBASE}/" \
+           -e "s/^DMS.DB_HOST=.*/DMS.DB_HOST=${DMS_DB_HOST}/" \
+           -e "s/^DMS.DATABASE_NAME=.*/DMS.DATABASE_NAME=${DMS_DOCBASE}/" \
+           -e "s/^DMS.DB_ID=.*/DMS.DB_ID=${DMS_DB_ID}/" "$f"; \
+    grep -E '^(DMS\.|DFC\.)' "$f"
+
+# --- 7) Restart path: a failed config restore (missing tnsnames/mdserver_conf backups) makes
+#        create_docbase.sh / create_ha_server.sh return an error, and install_docbroker_docbase_ts.sh
+#        then exits WITHOUT starting the docbase. Make the restore non-fatal.
+RUN for f in /opt/dctm_docker/scripts/create_docbase.sh /opt/dctm_docker/scripts/create_ha_server.sh; do \
+      sed -i 's|\(methodserver_restore_backup_changes\.sh restore\)[[:space:]]*$|\1 \|\| true|' "$f"; \
+      grep -q 'restore || true' "$f" && echo "patched: $f" || { echo "ERROR: restore line not patched in $f"; exit 1; }; \
+    done
+
+# --- 8) Process Engine scripts (run by the entry script only when ENABLE_PE=true).
+#        Mirrors the Helm peinstaller-init container: /pescripts/* minus 10peijmsdeploy.sh,
+#        and patches 10pedeploy.sh for Docker mode:
+#          - primary/replica decided by PE_PRIMARY instead of "<CONTAINER_NAME>-0" pod name
+#          - PE.FQDN = real hostname instead of "<host minus 2 chars>-jms-service" (k8s service)
+#          - /opt/dctm_docker/customscriptpvc -> custom_script_pvc (script uses both paths)
+COPY --from=pe --chown=dmadmin:dmadmin /pescripts/ /opt/dctm_docker/custom_script_pvc/
+RUN set -e; d=/opt/dctm_docker; f=$d/custom_script_pvc/10pedeploy.sh; \
+    rm -f $d/custom_script_pvc/10peijmsdeploy.sh; chmod +x $d/custom_script_pvc/*.sh; \
+    if [ -d $d/customscriptpvc ] && [ ! -L $d/customscriptpvc ]; then rm -rf $d/customscriptpvc; fi; \
+    ln -sfn $d/custom_script_pvc $d/customscriptpvc; \
+    sed -i -e 's/\[\[ \$hostname == \$CONTAINER_NAME-0\* \]\]/[[ "$PE_PRIMARY" == "true" ]]/g' \
+           -e 's/\[\[ \$hostname != \$CONTAINER_NAME-0\* \]\]/[[ "$PE_PRIMARY" != "true" ]]/g' \
+           -e 's/^\([[:space:]]*\)SERVICE_NAME=.*-jms-service"$/\1SERVICE_NAME="${PE_FQDN:-$(hostname)}"/' "$f"; \
+    n=$(grep -c 'PE_PRIMARY' "$f"); [ "$n" = "4" ] || { echo "ERROR: expected 4 PE_PRIMARY patches, got $n"; exit 1; }; \
+    grep -q 'SERVICE_NAME="${PE_FQDN' "$f" || { echo "ERROR: SERVICE_NAME not patched"; exit 1; }; \
+    echo "10pedeploy.sh patched for Docker mode"; ls -la $d/custom_script_pvc/
+
+ARG RUN_AS_USER=dmadmin
+USER ${RUN_AS_USER}
+CMD ["/opt/dctm_docker/dctm_entry.sh"]
