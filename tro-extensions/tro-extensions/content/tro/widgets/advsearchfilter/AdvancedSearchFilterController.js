@@ -398,22 +398,6 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
 
   // --- Card 2: exact phrase / wildcard ---
 
-  onSearchModeChange: function (group, value) {
-    var me = this;
-    var mode = (value && value.searchMode) || 'exact';
-
-    me.lookupReference('exactPhraseField').setVisible(mode === 'exact');
-    me.lookupReference('wildcardField').setVisible(mode === 'wildcard');
-
-    if (mode === 'exact') {
-      me.lookupReference('wildcardField').setValue('');
-    } else {
-      me.lookupReference('exactPhraseField').setValue('');
-    }
-
-    me.syncSessionJson();
-  },
-
   onInputChange: function () {
     this.syncSessionJson();
   },
@@ -438,9 +422,6 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
     var phrase = String(me.lookupReference('exactPhraseField').getValue() || '').trim();
     if (phrase) out.exactPhrase = phrase;
 
-    var wildcard = String(me.lookupReference('wildcardField').getValue() || '').trim();
-    if (wildcard) out.wildcard = wildcard;
-
     out.createdAt = Ext.Date.format(new Date(), 'c');
 
     return out;
@@ -463,11 +444,6 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
     me.onClearAll();
 
     if (obj.exactPhrase) me.lookupReference('exactPhraseField').setValue(obj.exactPhrase);
-    if (obj.wildcard) me.lookupReference('wildcardField').setValue(obj.wildcard);
-
-    var mode = obj.wildcard ? 'wildcard' : 'exact';
-    me.lookupReference('searchModeGroup').setValue({ searchMode: mode });
-    me.onSearchModeChange(me.lookupReference('searchModeGroup'), { searchMode: mode });
 
     if (Ext.isArray(obj.matchAll)) {
       Ext.Array.each(obj.matchAll, function (item) {
@@ -506,9 +482,6 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
     me.usedKeys = {};
 
     me.lookupReference('exactPhraseField').setValue('');
-    me.lookupReference('wildcardField').setValue('');
-    me.lookupReference('searchModeGroup').setValue({ searchMode: 'exact' });
-    me.onSearchModeChange(me.lookupReference('searchModeGroup'), { searchMode: 'exact' });
 
     me.resetAddRow();
 
@@ -516,52 +489,5 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
 
     me.refreshAttrStore();
     me.refreshAddRow();
-  },
-  
-init: function () {
-    this.addSearchModeStyles();
-},
-
-addSearchModeStyles: function () {
-
-    // Avoid injecting the same CSS multiple times
-    if (Ext.get('adv-search-mode-styles')) {
-        return;
-    }
-
-    var css = `
-        .adv-search-mode-group {
-            width: 260px !important;
-        }
-
-        .adv-search-mode-group .x-form-cb-label {
-            display: inline-block;
-            padding: 5px 9px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            background: #ffffff;
-            color: #374151;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .adv-search-mode-group .x-form-cb-input:checked + .x-form-cb-label {
-            background: #eaf2ff;
-            border-color: #2563eb;
-            color: #1d4ed8;
-        }
-
-        .adv-search-mode-group .x-form-cb-label:hover {
-            border-color: #2563eb;
-        }
-    `;
-
-    Ext.util.CSS.createStyleSheet(
-        css,
-        'adv-search-mode-styles'
-    );
-},
-
+  }
 });
