@@ -18,7 +18,7 @@
     <content src="content/tro/widgets/advsearchfilter/LookupValues.js" type="text/javascript"/>
     <content src="content/tro/widgets/advsearchfilter/LookupValue.js" type="text/javascript"/>
     <content src="content/tro/widgets/advsearchfilter/AttributeConfig.js" type="text/javascript"/>
-    <content src="content/tro/widgets/design/AdvancedSearchFilter.js" type="text/javascript" mode="design"/>
+    <content src="content/tro/widgets/designer/AdvancedSearchFilter.js" type="text/javascript" mode="design"/>
     
     <category>xcpPalette:Custom</category>
 

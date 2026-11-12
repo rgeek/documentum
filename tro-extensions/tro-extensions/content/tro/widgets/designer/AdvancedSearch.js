@@ -1,5 +1,6 @@
 
-Ext.override(DocumentumSearch.view.Viewport, {
+Ext.define('DocumentumSearch.override.Viewport', {
+    override: 'DocumentumSearch.view.Viewport',
 	processConfig: function(config) {
 		var store = Ext.create('Ext.data.TreeStore', {
 			root: {

@@ -15,27 +15,19 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
     me.usedKeys = {};
     me.nextChipId = 1;
 
-    // Local store for the "Attribute" combo — rebuilt from the backend config
-    // each time a chip is added/removed so each attribute can only be used once.
-    me.attrStore = Ext.create('Ext.data.Store', {
-      fields: ['key', 'label', 'attribute'],
-      data: []
-    });
-    me.lookupReference('attrCombo').setStore(me.attrStore);
+    // Child component references are not reliably resolvable during init, so
+    // wire everything up once the panel has been rendered. The attr/operator
+    // combos get their stores via ViewModel bindings, so no setStore() is
+    // needed here.
+    me.getView().on('afterrender', me.onViewReady, me, { single: true });
+  },
 
-    // Local store for the "Operator" combo — repopulated on attribute change.
-    me.operatorStore = Ext.create('Ext.data.Store', {
-      fields: ['value', 'label'],
-      data: []
-    });
-    me.lookupReference('operatorCombo').setStore(me.operatorStore);
+  onViewReady: function () {
+    var me = this;
 
     var lookupStore = me.getStore('lookupValues');
     lookupStore.on('beforeload', me.onLookupBeforeLoad, me);
     lookupStore.on('load', me.onLookupLoad, me);
-
-    me.lookupReference('valueCombo').setDisabled(true);
-    me.lookupReference('valueTag').setDisabled(true);
 
     // Fetch the attribute / operator / type config from the backend, then finish
     // initializing the panel (populate the attribute dropdown and restore any
@@ -102,7 +94,7 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
     var operatorCombo = me.lookupReference('operatorCombo');
     var data = (cfg && Ext.isArray(cfg.operators)) ? cfg.operators : [];
 
-    me.operatorStore.loadData(data);
+    me.getStore('operatorStore').loadData(data);
 
     if (data.length > 0) {
       operatorCombo.enable();
@@ -325,7 +317,7 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterController', {
       }
     });
 
-    me.attrStore.loadData(data);
+    me.getStore('attrStore').loadData(data);
   },
 
   refreshAddRow: function () {

@@ -10,6 +10,18 @@ Ext.define('AdvSearchFilter.view.search.AdvancedSearchFilterModel', {
   stores: {
     lookupValues: {
       type: 'lookupvalues'
+    },
+    // Local stores backing the "Attribute" and "Operator" combos. They are
+    // repopulated by the controller (refreshAttrStore / populateOperators) from
+    // the backend config, and are bound to the combos below so the controller
+    // never has to call setStore() on a child reference.
+    attrStore: {
+      fields: ['key', 'label', 'attribute'],
+      data: []
+    },
+    operatorStore: {
+      fields: ['value', 'label'],
+      data: []
     }
   },
 

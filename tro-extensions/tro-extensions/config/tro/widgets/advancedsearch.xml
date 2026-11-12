@@ -18,7 +18,7 @@
     <content src="content/tro/widgets/advsearch/SearchController.js" type="text/javascript"/>
     <content src="content/tro/widgets/advsearch/SearchQuery.js" type="text/javascript"/>
     <content src="content/tro/widgets/advsearch/SearchView.js" type="text/javascript"/>
-    <content src="content/tro/widgets/design/AdvancedSearch.js" type="text/javascript" mode="design"/>
+    <content src="content/tro/widgets/designer/AdvancedSearch.js" type="text/javascript" mode="design"/>
     
     <category>xcpPalette:Custom</category>
 
