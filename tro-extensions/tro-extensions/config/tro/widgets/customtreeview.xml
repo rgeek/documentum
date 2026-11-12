@@ -12,7 +12,7 @@
     <icon src="icons/contenttree_24_wig.png" width="24" height="24"/> <!-- drag-and-drop -->
 
     <content src="content/tro/widgets/CustomTreeView.js" type="text/javascript"/>
-    <content src="content/tro/widgets/design/CustomTreeView.js" type="text/javascript" mode="design"/>
+    <content src="content/tro/widgets/designer/CustomTreeView.js" type="text/javascript" mode="design"/>
     
     <category>xcpPalette:Custom</category>
 
